@@ -20,4 +20,5 @@ admin.site.site_header = "Inspiration Forge Administration"
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^', include('forgeblog.urls', namespace='forgeblog')),
 ]

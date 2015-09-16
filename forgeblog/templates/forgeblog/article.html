@@ -1,3 +1,9 @@
-<h1>{{ article.title }}</h1>
-<h4>Published: {{ article.pub_date }}</h4>
-<p>{{ article.text }}</p>
+{% extends "base.html" %}
+
+{% block content %}
+<div class="blog-post">
+  <h2 class="blog-post-title">{{ article.title }}</h2>
+  <p class="blog-post-meta">{{ article.pub_date }}</p>
+  <p>{{ article.text }}</p>
+</div><!-- /.blog-post -->
+{% endblock %}

@@ -1,9 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
 {% if latest_article_list %}
-    <ul>
-    {% for article in latest_article_list %}
-        <li><a href="{% url 'forgeblog:article' article.id %}">{{ article.title }}</a></li>
-    {% endfor %}
-    </ul>
+{% for article in latest_article_list %}
+<div class="blog-post">
+  <a href="{% url 'forgeblog:article' article.id %}"><h2 class="blog-post-title">{{ article.title }}</h2></a>
+  <p class="blog-post-meta">{{ article.pub_date }}</p>
+  <p>{{ article.text }}</p>
+</div><!-- /.blog-post -->
+{% endfor %}
+<nav>
+  <ul class="pager">
+    <li><a href="#">Previous</a></li>
+    <li><a href="#">Next</a></li>
+  </ul>
+</nav>
 {% else %}
-    <p>No posts are available.</p>
+<p>No posts are available.</p>
 {% endif %}
+
+{% endblock %}

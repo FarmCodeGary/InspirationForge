@@ -13,3 +13,6 @@ class IndexView(generic.ListView):
 class ArticleView (generic.DetailView):
     model = Article
     template_name = 'forgeblog/article.html'
+
+def test(request):
+    return render(request, 'base.html', {})

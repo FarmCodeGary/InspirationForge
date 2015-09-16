@@ -58,3 +58,6 @@ target/
 
 # sqlite database
 db.sqlite3
+
+# Temporary files
+*~

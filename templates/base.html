@@ -85,8 +85,13 @@
             <h3 class="panel-title">Recent Posts</h3>
           </div>
           <ul class="list-group">
-            <li class="list-group-item">Example post 1</li>
-            <li class="list-group-item">Example post 2</li>
+            {% for article in latest_articles %}
+              <li class="list-group-item">
+                <a href="{% url 'blog:article' article.id %}">
+                  {{ article.title }}
+                </a>
+              </li>
+            {% endfor %}
           </ul>
         </div>
         

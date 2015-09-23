@@ -3,16 +3,36 @@
 {% block content %}
 {% if latest_article_list %}
 {% for article in latest_article_list %}
-<div class="blog-post">
-  <a href="{% url 'forgeblog:article' article.id %}"><h2 class="blog-post-title">{{ article.title }}</h2></a>
-  <p class="blog-post-meta">{{ article.pub_date }}</p>
-  <p>{{ article.text }}</p>
-</div><!-- /.blog-post -->
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <a href="{% url 'forgeblog:article' article.id %}">
+      <h2 class="panel-title">{{ article.title }}</h2>
+    </a>
+    <p>{{ article.pub_date }}</p>
+  </div>
+  
+  <div class="panel-body">
+    <p>{{ article.text }}</p>
+  </div>
+</div>
 {% endfor %}
 <nav>
-  <ul class="pager">
-    <li><a href="#">Previous</a></li>
-    <li><a href="#">Next</a></li>
+  <ul class="pagination">
+    <li>
+      <a href="#" aria-label="Previous">
+        <span aria-hiden="true">&laquo;</span>
+      </a>
+    </li>
+    <li><a href="#">1</a><li>
+    <li><a href="#">2</a><li>
+    <li><a href="#">3</a><li>
+    <li><a href="#">4</a><li>
+    <li><a href="#">5</a><li>
+    <li>
+      <a href="#" aria-label="Next">
+        <span aria-hiden="true">&raquo;</span>
+      </a>
+    </li>
   </ul>
 </nav>
 {% else %}

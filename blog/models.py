@@ -11,7 +11,7 @@ class Article(models.Model):
     
     def __str__(self):
         return self.title
-
+    
     def save(self, *args, **kwargs):
         html = markdown.markdown(self.source_text)
         self.text = html

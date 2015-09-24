@@ -87,7 +87,7 @@
           <ul class="list-group">
             {% for article in latest_articles %}
               <li class="list-group-item">
-                <a href="{% url 'blog:article' year=article.pub_date.year month=article.pub_date.month|stringformat:"02d" slug=article.slug %}">
+                <a href="{{ article.get_absolute_url }}">
                   {{ article.title }}
                 </a>
               </li>

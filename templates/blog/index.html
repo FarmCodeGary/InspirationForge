@@ -4,7 +4,7 @@
 {% for article in latest_article_list %}
 <div class="panel panel-default">
   <div class="panel-heading">
-    <a href="{% url 'blog:article' year=article.pub_date.year month=article.pub_date.month|stringformat:"02d" slug=article.slug %}">
+    <a href="{{ article.get_absolute_url }}">
       <h2 class="panel-title">{{ article.title }}</h2>
     </a>
     <p>{{ article.pub_date }}</p>

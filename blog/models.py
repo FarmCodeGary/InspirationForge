@@ -33,6 +33,6 @@ class Comment(models.Model):
     pub_date = models.DateTimeField('date published', default=timezone.now)
     
     def __str__(self):
-        return 'comment by {} on "{}" at {}'.format(self.name,
+        return '{} on "{}" at {}'.format(self.name,
             self.article.title, self.pub_date)
 

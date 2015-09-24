@@ -15,4 +15,13 @@ class IndexView(generic.ListView):
 class ArticleView (generic.DetailView):
     model = Article
     template_name = 'blog/article.html'
+    
+    def get_object(self):
+        year = int(self.kwargs['year'])
+        month = int(self.kwargs['month'])
+        slug = self.kwargs['slug']
+        return Article.objects.get(
+            pub_date__year = year,
+            pub_date__month = month,
+            slug__exact = slug)
 

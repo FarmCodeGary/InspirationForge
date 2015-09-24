@@ -19,7 +19,7 @@ def create_article(title, source_text="test article text", days_in_past=0):
                                   pub_date = time)
 
 class IndexViewTests(TestCase):
-    def test_index_view_with_a_future_article(self):
+    def test_with_a_future_article(self):
         """
         Articles with a pub_date in the future should not be displayed on the
         index page.
@@ -29,4 +29,15 @@ class IndexViewTests(TestCase):
         self.assertContains(response, 'No posts are available.',
                             status_code=200)
         self.assertQuerysetEqual(response.context['latest_article_list'], [])
+
+class ArticleViewTests(TestCase):
+    def test_without_leading_zero_on_month(self):
+        pub_date = datetime.datetime(2013, 9, 15)
+        article = Article.objects.create(title="testarticle", source_text="testbody",
+            pub_date=pub_date)
+        response = self.client.get(reverse('blog:article',
+            args=['2013','9','testarticle']))
+        self.assertContains(response, 'testarticle', status_code=200)
+        self.assertContains(response, 'testbody')
+
 

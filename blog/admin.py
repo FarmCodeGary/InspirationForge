@@ -6,6 +6,7 @@ class CommentInline(admin.TabularInline):
     model = Comment
     extra = 0
 
+@admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
     fields = ['pub_date', 'title', 'slug', 'source_text']
     list_display = ('title', 'pub_date')
@@ -17,9 +18,8 @@ class ArticleAdmin(admin.ModelAdmin):
             "all": ("css/admin/article-admin.css",)
         }
 
+@admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
     list_display = ('article', 'name', 'text', 'pub_date')
-
-admin.site.register(Article, ArticleAdmin)
-admin.site.register(Comment, CommentAdmin)
+    list_display_links = ('text',)
 

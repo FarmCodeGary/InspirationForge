@@ -12,5 +12,22 @@
     <p>{{ article.text|safe }}</p>
   </div>
 </div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h2 class="panel-title">Comments</h3>
+  </div>
+  <div class="panel-body">
+    {% for comment in article.comment_set.all %}
+      <h5>{{ comment.name }}</h5>
+      <p>{{ comment.text }}</p>
+    {% endfor %}
+    <h4>Add a comment</h4>
+    <form>
+      {% csrf_token %}
+      {{ form }}
+      <input type="submit" value="Submit" />
+    </form>
+  </div>
+</div>
 {% endblock %}
 

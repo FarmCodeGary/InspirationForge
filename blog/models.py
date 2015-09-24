@@ -26,3 +26,13 @@ class Article(models.Model):
             self.slug = slugify(self.title)
         super(Article, self).save(*args, **kwargs)
 
+class Comment(models.Model):
+    article = models.ForeignKey(Article)
+    name = models.CharField(max_length=30)
+    text = models.TextField()
+    pub_date = models.DateTimeField('date published', default=timezone.now)
+    
+    def __str__(self):
+        return 'comment by {} on "{}" at {}'.format(self.name,
+            self.article.title, self.pub_date)
+

@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404, render
-from django.views.generic import ListView,DetailView
+from django.views.generic import ListView, DetailView, View, FormView
 from django.views.generic.edit import FormMixin
+from django.views.generic.detail import SingleObjectMixin
 from django.utils import timezone
 
 from .models import Article
@@ -14,10 +15,9 @@ class IndexView(ListView):
         return Article.objects.filter(pub_date__lte=timezone.now()
             ).order_by('-pub_date')[:5]
 
-class ArticleView(FormMixin, DetailView):
+class ArticleView(DetailView):
     model = Article
     template_name = 'blog/article.html'
-    form_class = CommentForm
     
     def get_object(self):
         year = int(self.kwargs['year'])
@@ -31,18 +31,19 @@ class ArticleView(FormMixin, DetailView):
     
     def get_context_data(self, **kwargs):
         context = super(DetailView, self).get_context_data(**kwargs)
-        context['form'] = self.get_form()
+        context['form'] = CommentForm()
         return context
     
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        form = self.get_form()
-        if form.is_valid():
-            return self.form_valid(form)
+        form = CommentForm(request.POST)
+        try:
+            new_comment = form.save(commit=False)
+        except ValueError:
+            pass
         else:
-            return self.form_invalid(form)
-    
-    def form_valid(self, form):
-        # Post the comment?
-        return super(AuthorDetail, self).form_valid(form)
+            new_comment.article = self.object
+            new_comment.pub_date = timezone.now()
+            new_comment.save()
+        return render(request, self.template_name, self.get_context_data())
 

@@ -6,10 +6,10 @@ from django.core.urlresolvers import reverse
 import markdown
 
 class Article(models.Model):
-    title = models.CharField(max_length=50)
+    title = models.CharField(max_length=100)
     source_text = models.TextField()
     text = models.TextField(editable=False)
-    slug = models.SlugField(unique_for_month='pub_date')
+    slug = models.SlugField(max_length=100, unique_for_month='pub_date')
     pub_date = models.DateTimeField('date published', default=timezone.now)
     
     def __str__(self):

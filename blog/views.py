@@ -41,9 +41,9 @@ class ArticleView(DetailView):
         try:
             new_comment = form.save(commit=False)
         except ValueError:
-            # TODO: Add error messages.
-            return HttpResponseRedirect(self.object.get_absolute_url() +
-                "#commentform")
+            context = self.get_context_data()
+            context['form'] = form
+            return render(request, self.template_name, context)
         else:
             new_comment.article = self.object
             new_comment.pub_date = timezone.now()

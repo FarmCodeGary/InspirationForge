@@ -28,7 +28,7 @@ class IndexViewTests(TestCase):
         response = self.client.get(reverse('blog:index'))
         self.assertContains(response, 'No posts are available.',
                             status_code=200)
-        self.assertQuerysetEqual(response.context['latest_article_list'], [])
+        self.assertQuerysetEqual(response.context['article_list'], [])
 
 class ArticleViewTests(TestCase):
     def test_without_leading_zero_on_month(self):

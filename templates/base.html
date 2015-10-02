@@ -100,8 +100,14 @@
             <h3 class="panel-title">Recent Comments</h3>
           </div>
           <ul class="list-group">
-            <li class="list-group-item">Example post 1</li>
-            <li class="list-group-item">Example post 2</li>
+            {% for comment in latest_comments %}
+              <li class="list-group-item">
+                {{ comment.name }} on 
+                <a href="{{ comment.article.get_absolute_url }}">
+                  {{ comment.article.title }}
+                </a>
+              </li>
+            {% endfor %}
           </ul>
         </div>
         

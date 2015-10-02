@@ -103,7 +103,7 @@
             {% for comment in latest_comments %}
               <li class="list-group-item">
                 {{ comment.name }} on 
-                <a href="{{ comment.article.get_absolute_url }}">
+                <a href="{{ comment.get_absolute_url }}">
                   {{ comment.article.title }}
                 </a>
               </li>

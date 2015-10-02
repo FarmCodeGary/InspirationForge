@@ -3,6 +3,7 @@ from django.views.generic import ListView, DetailView, View, FormView
 from django.views.generic.edit import FormMixin
 from django.views.generic.detail import SingleObjectMixin
 from django.utils import timezone
+from django.http import HttpResponseRedirect
 
 from .models import Article
 from .forms import CommentForm
@@ -40,10 +41,12 @@ class ArticleView(DetailView):
         try:
             new_comment = form.save(commit=False)
         except ValueError:
-            pass
+            # TODO: Add error messages.
+            return HttpResponseRedirect(self.object.get_absolute_url() +
+                "#commentform")
         else:
             new_comment.article = self.object
             new_comment.pub_date = timezone.now()
             new_comment.save()
-        return render(request, self.template_name, self.get_context_data())
+            return HttpResponseRedirect(new_comment.get_absolute_url())
 

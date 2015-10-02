@@ -35,4 +35,7 @@ class Comment(models.Model):
     def __str__(self):
         return '{} on "{}" at {}'.format(self.name,
             self.article.title, self.pub_date)
+    
+    def get_absolute_url(self):
+        return self.article.get_absolute_url() + "#comment-" + str(self.pk)
 

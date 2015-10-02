@@ -4,17 +4,19 @@ from django.views.generic.edit import FormMixin
 from django.views.generic.detail import SingleObjectMixin
 from django.utils import timezone
 from django.http import HttpResponseRedirect
+from django.core.paginator import Paginator
 
 from .models import Article
 from .forms import CommentForm
 
 class IndexView(ListView):
     template_name = 'blog/index.html'
-    context_object_name = 'latest_article_list'
-
+    paginate_by = 5
+    paginate_orphans = 1
+    
     def get_queryset(self):
         return Article.objects.filter(pub_date__lte=timezone.now()
-            ).order_by('-pub_date')[:5]
+            ).order_by('-pub_date')
 
 class ArticleView(DetailView):
     model = Article

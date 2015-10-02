@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% for article in latest_article_list %}
+{% for article in article_list %}
 <div class="panel panel-default">
   <div class="panel-heading">
     <a href="{{ article.get_absolute_url }}">
@@ -17,24 +17,30 @@
 {% empty %}
 <p>No posts are available.</p>
 {% endfor %}
-<nav>
-  <ul class="pagination">
-    <li>
-      <a href="#" aria-label="Previous">
-        <span aria-hiden="true">&laquo;</span>
-      </a>
-    </li>
-    <li><a href="#">1</a><li>
-    <li><a href="#">2</a><li>
-    <li><a href="#">3</a><li>
-    <li><a href="#">4</a><li>
-    <li><a href="#">5</a><li>
-    <li>
-      <a href="#" aria-label="Next">
-        <span aria-hiden="true">&raquo;</span>
-      </a>
-    </li>
-  </ul>
-</nav>
+{% if is_paginated %}
+  <nav>
+    <div class="text-center">
+      <ul class="pagination">
+        {% if page_obj.has_previous %}
+          <li>
+            <a href="{% url 'blog:indexpage' page_obj.previous_page_number %}" aria-label="Previous">
+              <span aria-hiden="true">&laquo;</span>
+            </a>
+          </li>
+        {% endif %}
+        {% for num in paginator.page_range %}
+          <li><a href="{% url 'blog:indexpage' num %}">{{ num }}</a><li>
+        {% endfor %}
+        {% if page_obj.has_next %}
+          <li>
+            <a href="{% url 'blog:indexpage' page_obj.next_page_number %}" aria-label="Next">
+              <span aria-hiden="true">&raquo;</span>
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+{% endif %}
 
 {% endblock %}

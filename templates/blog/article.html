@@ -7,6 +7,13 @@
   <div class="panel-heading">
     <h2 class="panel-title">{{ article.title }}</h3>
     <p>{{ article.pub_date }}</p>
+    {% if article.tags.all %}
+      <p>Tags: 
+      {% for tag in article.tags.all %}
+        {{ tag.name }}{% if not forloop.last %}, {% endif %}
+      {% endfor %}
+      </p>
+    {% endif %}
   </div>
   <div class="panel-body">
     <p>{{ article.text|safe }}</p>

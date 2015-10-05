@@ -5,12 +5,22 @@ from django.core.urlresolvers import reverse
 
 import markdown
 
+class Tag(models.Model):
+    name = models.CharField(max_length=30, unique=True)
+    
+    def __str__(self):
+        return self.name
+
 class Article(models.Model):
     title = models.CharField(max_length=100)
     source_text = models.TextField()
     text = models.TextField(editable=False)
     slug = models.SlugField(max_length=100, unique_for_month='pub_date')
     pub_date = models.DateTimeField('date published', default=timezone.now)
+    tags = models.ManyToManyField(Tag)
+    
+    class Meta:
+        ordering = ['-pub_date']
     
     def __str__(self):
         return self.title
@@ -31,6 +41,9 @@ class Comment(models.Model):
     name = models.CharField(max_length=30)
     text = models.TextField()
     pub_date = models.DateTimeField('date published', default=timezone.now)
+    
+    class Meta:
+        ordering = ['-pub_date']
     
     def __str__(self):
         return '{} on "{}" at {}'.format(self.name,

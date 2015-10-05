@@ -39,3 +39,8 @@ class Comment(models.Model):
     def get_absolute_url(self):
         return self.article.get_absolute_url() + "#comment-" + str(self.pk)
 
+class Upload(models.Model):
+    # TODO: Change upload_to to a callable, as per
+    # http://stackoverflow.com/questions/1190697/django-filefield-with-upload-to-determined-at-runtime
+    media_file = models.FileField(upload_to="%Y/%m")
+

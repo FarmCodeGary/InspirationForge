@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+MEDIA_ROOT = os.environ["DJANGO_MEDIA_ROOT"]
+MEDIA_URL = os.environ["DJANGO_MEDIA_URL"]
+
 
 # Application definition
 

@@ -18,8 +18,9 @@ class IndexView(ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['page_title'] = None
-        context['page_heading'] = None
+        page_title = self.get_page_title()
+        context['page_title'] = self.get_page_title()
+        context['page_heading'] = self.get_page_heading()
         return context
     
     def get_page_title(self):
@@ -40,7 +41,7 @@ class TagView(IndexView):
     
     def get_page_heading(self):
         tag = Tag.objects.get(slug__exact=self.kwargs['slug'])
-        return 'Posts with tag "{}":'.format(tag.name)
+        return 'Posts with tag "{}"'.format(tag.name)
 
 class ArticleView(DetailView):
     model = Article

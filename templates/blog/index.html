@@ -1,8 +1,14 @@
 {% extends "base.html" %}
 
-{% if page_title %}
-  {% block title %}{{ page_title }}{% endblock title %}
-{% endif %}
+
+{% block title %}
+  {% if page_title %}
+    {{ page_title }}
+  {% else %}
+    {{ block.super }}
+  {% endif %}
+{% endblock title %}
+
 
 {% block content %}
   {% block heading %}

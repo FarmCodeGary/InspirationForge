@@ -26,7 +26,7 @@ class Article(models.Model):
     text = models.TextField(editable=False)
     slug = models.SlugField(max_length=100, unique_for_month='pub_date')
     pub_date = models.DateTimeField('date published', default=timezone.now)
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag, blank=True)
     
     class Meta:
         ordering = ['-pub_date']
@@ -70,4 +70,7 @@ def image_filename(instance, filename):
 class Image(models.Model):
     name = models.CharField(max_length=50)
     media_file = models.ImageField(upload_to=image_filename)
+    
+    def __str__(self):
+        return self.name
 

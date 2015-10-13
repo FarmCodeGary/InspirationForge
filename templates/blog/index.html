@@ -1,46 +1,63 @@
 {% extends "base.html" %}
 
+
+{% block title %}
+  {% if page_title %}
+    {{ page_title }}
+  {% else %}
+    {{ block.super }}
+  {% endif %}
+{% endblock title %}
+
+
 {% block content %}
-{% for article in article_list %}
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <a href="{{ article.get_absolute_url }}">
-      <h2 class="panel-title">{{ article.title }}</h2>
-    </a>
-    <p>{{ article.pub_date }}</p>
-  </div>
-  
-  <div class="panel-body">
-    <p>{{ article.text|safe }}</p>
-  </div>
-</div>
-{% empty %}
-<p>No posts are available.</p>
-{% endfor %}
-{% if is_paginated %}
-  <nav>
-    <div class="text-center">
-      <ul class="pagination">
-        {% if page_obj.has_previous %}
-          <li>
-            <a href="{% url 'blog:indexpage' page_obj.previous_page_number %}" aria-label="Previous">
-              <span aria-hiden="true">&laquo;</span>
-            </a>
-          </li>
-        {% endif %}
-        {% for num in paginator.page_range %}
-          <li><a href="{% url 'blog:indexpage' num %}">{{ num }}</a><li>
-        {% endfor %}
-        {% if page_obj.has_next %}
-          <li>
-            <a href="{% url 'blog:indexpage' page_obj.next_page_number %}" aria-label="Next">
-              <span aria-hiden="true">&raquo;</span>
-            </a>
-          </li>
-        {% endif %}
-      </ul>
+  {% block heading %}
+    {% if page_heading %}
+      <h1>{{ page_heading }}</h1>
+    {% endif %}
+  {% endblock heading %}
+
+  {% for article in article_list %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <a href="{{ article.get_absolute_url }}">
+        <h2 class="panel-title">{{ article.title }}</h2>
+      </a>
+      <p>{{ article.pub_date }}</p>
     </div>
-  </nav>
-{% endif %}
+    
+    <div class="panel-body">
+      <p>{{ article.text|safe }}</p>
+    </div>
+  </div>
+  {% empty %}
+  <p>No posts are available.</p>
+  {% endfor %}
+  {% if is_paginated %}
+    <nav>
+      <div class="text-center">
+        <ul class="pagination">
+          {% if page_obj.has_previous %}
+            <li>
+              <a href="{% url 'blog:indexpage' page_obj.previous_page_number %}" aria-label="Previous">
+                <span aria-hiden="true">&laquo;</span>
+              </a>
+            </li>
+          {% endif %}
+          {% for num in paginator.page_range %}
+            <li><a href="{% url 'blog:indexpage' num %}">{{ num }}</a><li>
+          {% endfor %}
+          {% if page_obj.has_next %}
+            <li>
+              <a href="{% url 'blog:indexpage' page_obj.next_page_number %}" aria-label="Next">
+                <span aria-hiden="true">&raquo;</span>
+              </a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
+  {% endif %}
 
 {% endblock %}
+

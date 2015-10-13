@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator
 
-from .models import Article
+from .models import Article, Tag
 from .forms import CommentForm
 
 class IndexView(ListView):
@@ -15,6 +15,33 @@ class IndexView(ListView):
     paginate_orphans = 1
     queryset = Article.objects.filter(pub_date__lte=timezone.now()
             ).order_by('-pub_date')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        page_title = self.get_page_title()
+        context['page_title'] = self.get_page_title()
+        context['page_heading'] = self.get_page_heading()
+        return context
+    
+    def get_page_title(self):
+        return None
+    
+    def get_page_heading(self):
+        return None
+
+class TagView(IndexView):
+    def get_queryset(self):
+        slug = self.kwargs['slug']
+        tag = Tag.objects.get(slug__exact=slug)
+        return tag.article_set.all()
+    
+    def get_page_title(self):
+        tag = Tag.objects.get(slug__exact=self.kwargs['slug'])
+        return 'Posts with tag "{}"'.format(tag.name)
+    
+    def get_page_heading(self):
+        tag = Tag.objects.get(slug__exact=self.kwargs['slug'])
+        return 'Posts with tag "{}"'.format(tag.name)
 
 class ArticleView(DetailView):
     model = Article

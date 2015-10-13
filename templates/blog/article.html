@@ -1,38 +1,47 @@
 {% extends "base.html" %}
 
-{% block title %}{% endblock title %}
+{% block title %}{{ article.title }}{% endblock title %}
 
 {% block content %}
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h2 class="panel-title">{{ article.title }}</h3>
-    <p>{{ article.pub_date }}</p>
-  </div>
-  <div class="panel-body">
-    <p>{{ article.text|safe }}</p>
-  </div>
-</div>
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h2 class="panel-title">Comments</h2>
-  </div>
-  <div id="comments" class="panel-body">
-    {% for comment in article.comment_set.all %}
-      <h5 id="comment-{{ comment.pk }}">{{ comment.name }}</h5>
-      <p>{{ comment.text }}</p>
-    {% endfor %}
-    <h4>Add a comment</h4>
-    <form id="commentform" action="{{ article.get_absolute_url }}#commentform" method="post">
-      {% csrf_token %}
-      {% for field in form %}
-        {% for error in field.errors %}
-          <p>{{ error }}</p>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h2 class="panel-title">{{ article.title }}</h3>
+      <p>{{ article.pub_date }}</p>
+      {% if article.tags %}
+        <p>Tags: 
+        {% for tag in article.tags.all %}
+          <a href="{{ tag.get_absolute_url }}">
+            {{ tag.name }}{% if not forloop.last %}, {% endif %}
+          </a>
         {% endfor %}
-        <p>{{ field }}</p>
-      {% endfor %}
-      <input type="submit" value="Submit" />
-    </form>
+        </p>
+      {% endif %}
+    </div>
+    <div class="panel-body">
+      <p>{{ article.text|safe }}</p>
+    </div>
   </div>
-</div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h2 class="panel-title">Comments</h2>
+    </div>
+    <div id="comments" class="panel-body">
+      {% for comment in article.comment_set.all %}
+        <h5 id="comment-{{ comment.pk }}">{{ comment.name }}</h5>
+        <p>{{ comment.text }}</p>
+      {% endfor %}
+      <h4>Add a comment</h4>
+      <form id="commentform" action="{{ article.get_absolute_url }}#commentform" method="post">
+        {% csrf_token %}
+        {% for field in form %}
+          {% for error in field.errors %}
+            <p>{{ error }}</p>
+          {% endfor %}
+          <p>{{ field }}</p>
+        {% endfor %}
+        <input type="submit" value="Submit" />
+      </form>
+    </div>
+  </div>
 {% endblock %}
 

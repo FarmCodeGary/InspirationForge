@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Article, Comment, Tag
+from .models import Article, Comment, Tag, Image
 
 class CommentInline(admin.TabularInline):
     model = Comment
@@ -24,4 +24,5 @@ class CommentAdmin(admin.ModelAdmin):
     list_display_links = ('text',)
 
 admin.site.register(Tag)
+admin.site.register(Image)
 

@@ -61,8 +61,13 @@ class Comment(models.Model):
     def get_absolute_url(self):
         return self.article.get_absolute_url() + "#comment-" + str(self.pk)
 
-class Upload(models.Model):
-    # TODO: Change upload_to to a callable, as per
-    # http://stackoverflow.com/questions/1190697/django-filefield-with-upload-to-determined-at-runtime
-    media_file = models.FileField(upload_to="%Y/%m")
+
+def image_filename(instance, filename):
+    now = timezone.now()
+    reformatted = filename.lower().replace(" ","-").replace("_","-")
+    return "{}/{:02d}/{}".format(now.year, now.month, reformatted)
+
+class Image(models.Model):
+    name = models.CharField(max_length=50)
+    media_file = models.ImageField(upload_to=image_filename)
 

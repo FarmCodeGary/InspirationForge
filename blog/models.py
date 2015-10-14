@@ -20,6 +20,7 @@ class Tag(models.Model):
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
 
+
 class Article(models.Model):
     title = models.CharField(max_length=100)
     source_text = models.TextField()
@@ -45,10 +46,11 @@ class Article(models.Model):
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
 
+
 class Comment(models.Model):
     article = models.ForeignKey(Article)
     name = models.CharField(max_length=30)
-    text = models.TextField()
+    text = models.TextField(verbose_name="Comment")
     pub_date = models.DateTimeField('date published', default=timezone.now)
     
     class Meta:

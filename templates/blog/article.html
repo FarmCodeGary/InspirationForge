@@ -16,14 +16,14 @@
 <div id="comments">
   <h3>Comments</h3>
   {% for comment in article.comment_set.all %}
-    <div class="panel panel-default">
+    <div id="comment-{{ comment.pk }}" class="panel panel-default">
       <div class="panel-heading comment-heading clearfix">
         <h3 class="panel-title comment-name">
           {{ comment.name }}
         </h3>
         <p class="comment-meta">
           <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-          {{ comment.pub_date }}
+          {{ comment.pub_date|date:"n/j/Y g:i A" }}
         </p>
       </div>
       <div class="panel-body">

@@ -1,5 +1,5 @@
 <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-{{ article.pub_date }}
+{{ article.pub_date|date:"l, F j, Y" }}
 {% if article.tags.all %}
   <span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
   {% for tag in article.tags.all %}

@@ -45,9 +45,7 @@
       </nav>
       
       <div class="col-sm-8">
-        {% block content %}
-        
-        {% endblock content %}
+        {% block content %}{% endblock content %}
       </div>
       
       <div class="col-sm-4">
@@ -86,37 +84,19 @@
           <div class="panel-heading">
             <h3 class="panel-title">Tags</h3>
           </div>
-          <ul class="list-group">
-            {% for tag in tags %}
-              <li class="list-group-item">
-                <a href="{{ tag.get_absolute_url }}">
-                  {{ tag.name }}
-                </a>
-                ({{ tag.num_articles }})
-              </li>
-            {% endfor %}
-          </ul>
+          <div class="panel-body">
+            <p>
+              {% for tag in tags %}
+                <a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>
+                ({{ tag.num_articles }}){% if not forloop.last %}, {% endif%}
+              {% endfor %}
+            </p>
+          </div>
         </div>
         
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">Social</h3>
-          </div>
-          <ul class="list-group">
-            <li class="list-group-item">Example post 1</li>
-            <li class="list-group-item">Example post 2</li>
-          </ul>
-        </div>
+        {% include "snippets/_social_links.html" %}
+        {% include "snippets/_blogroll.html" %}
         
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">Blogroll</h3>
-          </div>
-          <ul class="list-group">
-            <li class="list-group-item">Example post 1</li>
-            <li class="list-group-item">Example post 2</li>
-          </ul>
-        </div>
       </div>
       
     </div>

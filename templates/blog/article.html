@@ -5,7 +5,7 @@
 
 {% block content %}
 <div class="blog-heading">
-  <h2>{{ article.title }}</h2>
+  <h1>{{ article.title }}</h1>
   <p>{% include 'blog/_article_metadata.html' %}</p>
 </div>
 <hr/>
@@ -17,8 +17,14 @@
   <h3>Comments</h3>
   {% for comment in article.comment_set.all %}
     <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">{{ comment.name }} ({{ comment.pub_date }})</h3>
+      <div class="panel-heading comment-heading clearfix">
+        <h3 class="panel-title comment-name">
+          {{ comment.name }}
+        </h3>
+        <p class="comment-meta">
+          <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+          {{ comment.pub_date }}
+        </p>
       </div>
       <div class="panel-body">
         <p>{{ comment.text }}

@@ -8,7 +8,9 @@
   font-size: small;
 }
 
-.blog-heading h2 {
+.blog-heading h1,
+.blog-heading h2,
+.blog-heading h3 {
   margin-top: 0px;
 }
 
@@ -23,3 +25,13 @@
 .read-post-btn {
   float: right;
 }
+
+.comment-name {
+  float: left;
+}
+
+.comment-meta {
+  float: right;
+  margin-bottom: 0px;
+}
+

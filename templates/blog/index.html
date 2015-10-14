@@ -48,7 +48,15 @@
             </li>
           {% endif %}
           {% for num in paginator.page_range %}
-            <li><a href="{% url 'blog:indexpage' num %}">{{ num }}</a><li>
+            <li>
+              {% if num == 1 %}
+                <a href="{% url 'blog:index' %}">
+              {% else %}
+                <a href="{% url 'blog:indexpage' num %}">
+              {% endif %}
+                  {{ num }}
+                </a>
+            <li>
           {% endfor %}
           {% if page_obj.has_next %}
             <li>

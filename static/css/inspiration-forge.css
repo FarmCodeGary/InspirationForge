@@ -20,3 +20,11 @@
   margin-top: 0px;
 }
 
+#site-footer p {
+  text-align: center;
+}
+
+#site-footer .panel {
+  margin-bottom: 0px;
+}
+

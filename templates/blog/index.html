@@ -3,7 +3,7 @@
 
 {% block title %}
   {% if page_title %}
-    {{ page_title }}
+    {{ page_title }} | {{ block.super }}
   {% else %}
     {{ block.super }}
   {% endif %}

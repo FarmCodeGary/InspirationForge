@@ -61,3 +61,6 @@ db.sqlite3
 
 # Temporary files
 *~
+
+# Inspiration Forge-specific
+media/

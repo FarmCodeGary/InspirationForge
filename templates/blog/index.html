@@ -33,6 +33,12 @@
             {{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
         {% endfor %}
         {% endif %}
+        {% if article.comment_set.all %}
+          <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+          <a href="{{ article.get_absolute_url }}#comments">
+            {{ article.comment_set.all|length }} Comments
+          </a>
+        {% endif %}
       </p>
     </div>
     

@@ -4,28 +4,32 @@
 {% block title %}{{ article.title }} | {{ block.super }}{% endblock title %}
 
 {% block content %}
-  <div class="blog-heading">
-    <h2>{{ article.title }}</h2>
-    <p>{% include 'blog/_article_metadata.html' %}</p>
-  </div>
-  <hr/>
-  <div class="blog-content">
-    {{ article.text|safe }}
-  </div>
-  <hr/>
-  <div id="comments" class="panel panel-default">
+<div class="blog-heading">
+  <h2>{{ article.title }}</h2>
+  <p>{% include 'blog/_article_metadata.html' %}</p>
+</div>
+<hr/>
+<div class="blog-content">
+  {{ article.text|safe }}
+</div>
+<hr/>
+<div id="comments">
+  <h3>Comments</h3>
+  {% for comment in article.comment_set.all %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">{{ comment.name }} ({{ comment.pub_date }})</h3>
+      </div>
+      <div class="panel-body">
+        <p>{{ comment.text }}
+      </div>
+    </div>
+  {% endfor %}
+  <div class="panel panel-default">
     <div class="panel-heading">
-      <h2 class="panel-title">Comments</h2>
+      <h3 class="panel-title">Add a comment</h3>
     </div>
     <div class="panel-body">
-      {% for comment in article.comment_set.all %}
-        <h4 id="comment-{{ comment.pk }}">
-          {{ comment.name }} ({{ comment.pub_date }})
-        </h4>
-        <p>{{ comment.text }}</p>
-        <hr/>
-      {% endfor %}
-      <h4>Add a comment</h4>
       <form id="commentform" action="{{ article.get_absolute_url }}#commentform" method="post" class="form">
         {% csrf_token %}
         {% bootstrap_form form %}
@@ -35,5 +39,6 @@
       </form>
     </div>
   </div>
+</div>
 {% endblock %}
 

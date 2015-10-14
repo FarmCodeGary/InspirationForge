@@ -17,11 +17,15 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.views.generic.base import TemplateView
 
 admin.site.site_header = "Inspiration Forge Administration"
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^about/', 
+        TemplateView.as_view(template_name='about.html'),
+        name='about'),
     url(r'^', include('blog.urls', namespace='blog')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 # TODO Remove static in production.

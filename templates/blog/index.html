@@ -29,10 +29,9 @@
         {% if article.tags %}
           <span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
           {% for tag in article.tags.all %}
-            <a href="{{ tag.get_absolute_url }}">
-              {{ tag.name }}{% if not forloop.last %}, {% endif %}
-            </a>
-          {% endfor %}
+          <a href="{{ tag.get_absolute_url }}">
+            {{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+        {% endfor %}
         {% endif %}
       </p>
     </div>

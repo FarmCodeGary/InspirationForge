@@ -29,6 +29,7 @@ class IndexView(ListView):
     def get_page_heading(self):
         return None
 
+
 class TagView(IndexView):
     def get_queryset(self):
         slug = self.kwargs['slug']
@@ -37,11 +38,12 @@ class TagView(IndexView):
     
     def get_page_title(self):
         tag = Tag.objects.get(slug__exact=self.kwargs['slug'])
-        return 'Posts with tag "{}"'.format(tag.name)
+        return 'Posts tagged "{}"'.format(tag.name)
     
     def get_page_heading(self):
         tag = Tag.objects.get(slug__exact=self.kwargs['slug'])
-        return 'Posts with tag "{}"'.format(tag.name)
+        return 'Posts tagged "{}"'.format(tag.name)
+
 
 class ArticleView(DetailView):
     model = Article

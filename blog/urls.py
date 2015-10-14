@@ -10,6 +10,6 @@ urlpatterns = [
         views.ArticleView.as_view(), name='article'),
     url(r'^tag/(?P<slug>[a-z0-9_-]+)/$', views.TagView.as_view(),
         name='tag'),
-    url(r'^feed/$', feeds.LatestArticlesFeed()),
+    url(r'^feed/$', feeds.LatestArticlesFeed(), name='rssfeed'),
 ]
 

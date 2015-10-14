@@ -21,29 +21,14 @@
   <div class="panel panel-default">
     <div class="panel-heading blog-heading">
       <a href="{{ article.get_absolute_url }}">
-        <h2 class="article-title">{{ article.title }}</h2>
+        <h2>{{ article.title }}</h2>
       </a>
-      <p>
-        <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-        {{ article.pub_date }}
-        {% if article.tags.all %}
-          <span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
-          {% for tag in article.tags.all %}
-          <a href="{{ tag.get_absolute_url }}">
-            {{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
-        {% endfor %}
-        {% endif %}
-        {% if article.comment_set.all %}
-          <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
-          <a href="{{ article.get_absolute_url }}#comments">
-            {{ article.comment_set.all|length }} Comments
-          </a>
-        {% endif %}
-      </p>
+      <p>{% include 'blog/_article_metadata.html' %}</p>
     </div>
     
     <div class="panel-body blog-content">
-      {{ article.text|safe }}
+      {{ article.text|safe|truncatewords_html:80 }}
+      <a class="btn btn-default read-post-btn">Read Post</a>
     </div>
   </div>
   {% empty %}

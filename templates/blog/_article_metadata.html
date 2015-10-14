@@ -1,0 +1,21 @@
+<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+{{ article.pub_date }}
+{% if article.tags.all %}
+  <span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
+  {% for tag in article.tags.all %}
+    <a href="{{ tag.get_absolute_url }}">
+      {{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+  {% endfor %}
+{% endif %}
+{% if article.comment_set.all %}
+  <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+  <a href="{{ article.get_absolute_url }}#comments">
+    {{ article.comment_set.all|length }}
+    {% if article.comment_set.all|length > 1 %}
+      Comments
+    {% else %}
+      Comment
+    {% endif %}
+  </a>
+{% endif %}
+

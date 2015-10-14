@@ -5,29 +5,14 @@
 
 {% block content %}
   <div class="blog-heading">
-    <h2 class="article-title">{{ article.title }}</h2>
-    <p>
-      <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-      {{ article.pub_date }}
-      {% if article.tags.all %}
-        <span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
-        {% for tag in article.tags.all %}
-          <a href="{{ tag.get_absolute_url }}">
-            {{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
-        {% endfor %}
-      {% endif %}
-      {% if article.comment_set.all %}
-        <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
-        <a href="{{ article.get_absolute_url }}#comments">
-          {{ article.comment_set.all|length }} Comments
-        </a>
-      {% endif %}
-    </p>
+    <h2>{{ article.title }}</h2>
+    <p>{% include 'blog/_article_metadata.html' %}</p>
   </div>
   <hr/>
   <div class="blog-content">
     {{ article.text|safe }}
   </div>
+  <hr/>
   <div id="comments" class="panel panel-default">
     <div class="panel-heading">
       <h2 class="panel-title">Comments</h2>

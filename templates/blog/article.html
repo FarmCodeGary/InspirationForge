@@ -1,25 +1,26 @@
 {% extends "base.html" %}
+{% load bootstrap3 %}
 
 {% block title %}{{ article.title }}{% endblock title %}
 
 {% block content %}
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h2 class="panel-title">{{ article.title }}</h3>
-      <p>{{ article.pub_date }}</p>
+  <div class="blog-heading">
+    <h2 class="article-title">{{ article.title }}</h2>
+    <p>
+      <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+      {{ article.pub_date }}
       {% if article.tags %}
-        <p>Tags: 
+        <span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
         {% for tag in article.tags.all %}
           <a href="{{ tag.get_absolute_url }}">
-            {{ tag.name }}{% if not forloop.last %}, {% endif %}
-          </a>
+            {{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
         {% endfor %}
-        </p>
       {% endif %}
-    </div>
-    <div class="panel-body blog-article">
-      {{ article.text|safe }}
-    </div>
+    </p>
+  </div>
+  <hr/>
+  <div class="blog-content">
+    {{ article.text|safe }}
   </div>
   <div class="panel panel-default">
     <div class="panel-heading">
@@ -31,15 +32,12 @@
         <p>{{ comment.text }}</p>
       {% endfor %}
       <h4>Add a comment</h4>
-      <form id="commentform" action="{{ article.get_absolute_url }}#commentform" method="post">
+      <form id="commentform" action="{{ article.get_absolute_url }}#commentform" method="post" class="form">
         {% csrf_token %}
-        {% for field in form %}
-          {% for error in field.errors %}
-            <p>{{ error }}</p>
-          {% endfor %}
-          <p>{{ field }}</p>
-        {% endfor %}
-        <input type="submit" value="Submit" />
+        {% bootstrap_form form %}
+        {% buttons %}
+          <button type="submit" class="btn btn-primary">Submit</button>
+        {% endbuttons %}
       </form>
     </div>
   </div>

@@ -1,5 +1,22 @@
 
-.blog-article img {
+.blog-content img {
   max-width: 100%;
+  border-radius: 8px;
+}
+
+.article-title {
+  
+}
+
+.blog-content {
+  margin-bottom: 30px;
+}
+
+.blog-heading p {
+  font-size: small;
+}
+
+.blog-heading h2 {
+  margin-top: 0px;
 }
 

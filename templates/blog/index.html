@@ -19,15 +19,26 @@
 
   {% for article in article_list %}
   <div class="panel panel-default">
-    <div class="panel-heading">
+    <div class="panel-heading blog-heading">
       <a href="{{ article.get_absolute_url }}">
-        <h2 class="panel-title">{{ article.title }}</h2>
+        <h2 class="article-title">{{ article.title }}</h2>
       </a>
-      <p>{{ article.pub_date }}</p>
+      <p>
+        <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+        {{ article.pub_date }}
+        {% if article.tags %}
+          <span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
+          {% for tag in article.tags.all %}
+            <a href="{{ tag.get_absolute_url }}">
+              {{ tag.name }}{% if not forloop.last %}, {% endif %}
+            </a>
+          {% endfor %}
+        {% endif %}
+      </p>
     </div>
     
-    <div class="panel-body">
-      <p>{{ article.text|safe }}</p>
+    <div class="panel-body blog-content">
+      {{ article.text|safe }}
     </div>
   </div>
   {% empty %}

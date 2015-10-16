@@ -32,8 +32,7 @@ class IndexView(ListView):
 class TagView(IndexView):
     def get_queryset(self):
         slug = self.kwargs['slug']
-        tag = Tag.objects.get(slug__exact=slug)
-        return tag.article_set.all()
+        return Article.published_articles().filter(tags__slug__exact=slug)
     
     def get_page_title(self):
         tag = Tag.objects.get(slug__exact=self.kwargs['slug'])

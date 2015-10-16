@@ -4,8 +4,8 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.utils import timezone
 
-from .models import Article, Comment
-from .views import ArticleView, IndexView
+from .models import Article, Comment, Tag
+from .views import ArticleView, IndexView, TagView
 
 def create_article(title, source_text="test article text", days_in_past=0):
     """
@@ -24,10 +24,28 @@ class IndexViewTests(TestCase):
         Articles with a pub_date in the future should not be displayed on the
         index page.
         """
-        create_article("Future article",days_in_past=-1)
+        create_article("Future article", days_in_past=-1)
         response = self.client.get(reverse('blog:index'))
         self.assertContains(response, 'No posts are available.',
                             status_code=200)
+        self.assertQuerysetEqual(response.context['article_list'], [])
+
+
+class TagViewTests(TestCase):
+    def test_with_future_article(self):
+        """
+        Articles with a pub_date in the future should not be displayed on the
+        tag page.
+        """
+        tag = Tag.objects.create(name="test tag")
+        article = Article.objects.create(title="Future article",
+            source_text = "This is a test article.",
+            pub_date = (timezone.now() + datetime.timedelta(days=1)),
+        )
+        article.tags.add(tag)
+        response = self.client.get(reverse('blog:tag', args=["test-tag"]))
+        self.assertContains(response, 'No posts are available.',
+            status_code=200)
         self.assertQuerysetEqual(response.context['article_list'], [])
 
 

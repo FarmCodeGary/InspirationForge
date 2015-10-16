@@ -45,6 +45,11 @@ class Article(models.Model):
         if self.slug == None or self.slug == "":
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
+    
+    @staticmethod
+    def published_articles():
+        return Article.objects.filter(pub_date__lte=timezone.now()
+            ).order_by('-pub_date')
 
 
 class Comment(models.Model):

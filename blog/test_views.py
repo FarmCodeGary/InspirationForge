@@ -30,6 +30,7 @@ class IndexViewTests(TestCase):
                             status_code=200)
         self.assertQuerysetEqual(response.context['article_list'], [])
 
+
 class ArticleViewTests(TestCase):
     def test_without_leading_zero_on_month(self):
         pub_date = timezone.make_aware(datetime.datetime(2013, 9, 15))

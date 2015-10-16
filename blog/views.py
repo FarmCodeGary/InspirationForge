@@ -13,8 +13,7 @@ class IndexView(ListView):
     template_name = 'blog/index.html'
     paginate_by = 5
     paginate_orphans = 1
-    queryset = Article.objects.filter(pub_date__lte=timezone.now()
-            ).order_by('-pub_date')
+    queryset = Article.published_articles()
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

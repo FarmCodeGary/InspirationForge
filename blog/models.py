@@ -105,6 +105,9 @@ def image_filename(instance, filename):
 
 
 class Image(models.Model):
+    """
+    Model representing an uploaded Image.
+    """
     name = models.CharField(max_length=50)
     media_file = models.ImageField(upload_to=image_filename)
     

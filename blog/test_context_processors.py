@@ -23,11 +23,18 @@ class LatestContentTest(TestCase):
         self.factory = RequestFactory()
     
     def test_latest_articles_with_no_articles(self):
+        """
+        When there are no articles, `latest_articles` should be empty.
+        """
         request = self.factory.get('/')
         context = latest_content(request)
         self.assertQuerysetEqual(context['latest_articles'], [])
     
     def test_latest_articles_with_future_article(self):
+        """
+        When there's only one article -- which is in the future --
+        `latest_articles` should be empty.
+        """
         create_article("article 1", days_in_past = -1)
         request = self.factory.get('/')
         context = latest_content(request)

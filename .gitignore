@@ -64,3 +64,6 @@ db.sqlite3
 
 # Inspiration Forge-specific
 media/
+secrets.json
+deployment.txt
+

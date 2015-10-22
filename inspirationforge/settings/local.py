@@ -30,6 +30,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 
-MEDIA_ROOT = os.environ["DJANGO_MEDIA_ROOT"]
-MEDIA_URL = os.environ["DJANGO_MEDIA_URL"]
+MEDIA_ROOT = get_secret("MEDIA_ROOT")
+MEDIA_URL = "/media/"
 

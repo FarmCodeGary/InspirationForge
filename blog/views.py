@@ -20,7 +20,12 @@ class IndexView(ListView):
     template_name = 'blog/index.html'
     paginate_by = 5
     paginate_orphans = 1
-    queryset = Article.published_articles()
+    
+    def get_queryset(self):
+        """
+        Returns queryset containing all published articles.
+        """
+        return Article.published_articles()
     
     def get_context_data(self, **kwargs):
         """
@@ -29,7 +34,6 @@ class IndexView(ListView):
         respectively).
         """
         context = super().get_context_data(**kwargs)
-        page_title = self.get_page_title()
         context['page_title'] = self.get_page_title()
         context['page_heading'] = self.get_page_heading()
         return context

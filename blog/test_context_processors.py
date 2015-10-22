@@ -47,4 +47,12 @@ class LatestContentTest(TestCase):
         self.assertQuerysetEqual(context['latest_articles'],
             ['<Article: article 1>']
         )
+    
+    def test_latest_articles_with_recent_article(self):
+        create_article("article 1", days_in_past = 0)
+        request = self.factory.get('/')
+        context = latest_content(request)
+        self.assertQuerysetEqual(context['latest_articles'],
+            ['<Article: article 1>']
+        )
 

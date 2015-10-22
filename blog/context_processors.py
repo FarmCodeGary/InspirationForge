@@ -9,10 +9,8 @@ def latest_content(request):
     `latest_comments`, and all tags (annotated with `num_articles` field) as
     `tags` to the context, regardless of `request`.
     """
-    latest_articles = Article.objects.filter(pub_date__lte=timezone.now()
-        ).order_by('-pub_date')[:5]
-    latest_comments = Comment.objects.filter(pub_date__lte=timezone.now()
-        ).order_by('-pub_date')[:5]
+    latest_articles = Article.published_articles()[:5]
+    latest_comments = Comment.objects.all().order_by('-pub_date')[:5]
     tags = Tag.objects.annotate(num_articles=Count('article')).order_by(
         '-num_articles')
     return {'latest_articles': latest_articles,

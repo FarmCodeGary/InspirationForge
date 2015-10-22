@@ -29,6 +29,30 @@ class IndexViewTests(TestCase):
         self.assertContains(response, 'No posts are available.',
                             status_code=200)
         self.assertQuerysetEqual(response.context['article_list'], [])
+    
+    def test_with_a_past_article(self):
+        """
+        Articles with a pub_date in the past should be displayed on the index
+        page.
+        """
+        article = create_article("Past article", days_in_past=1)
+        response = self.client.get(reverse('blog:index'))
+        self.assertContains(response, "<h3>{}</h3>".format(article.title),
+                            status_code=200)
+        self.assertQuerysetEqual(response.context['article_list'],
+            ['<Article: Past article>'])
+    
+    def test_with_recent_article(self):
+        """
+        Articles with a pub_date in the very recent past should be displayed
+        on the index page.
+        """
+        article = create_article("Recent article", days_in_past=0)
+        response = self.client.get(reverse('blog:index'))
+        self.assertContains(response, "<h3>{}</h3>".format(article.title),
+                            status_code=200)
+        self.assertQuerysetEqual(response.context['article_list'],
+            ['<Article: Recent article>'])
 
 
 class TagViewTests(TestCase):

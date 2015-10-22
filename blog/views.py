@@ -5,6 +5,7 @@ from django.views.generic.detail import SingleObjectMixin
 from django.utils import timezone
 from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator
+from django.core.mail import mail_admins
 
 from .models import Article, Tag
 from .forms import CommentForm
@@ -116,5 +117,13 @@ class ArticleView(DetailView):
             new_comment.article = self.object
             new_comment.pub_date = timezone.now()
             new_comment.save()
+            
+            subject = 'New comment on "{}" from "{}"'.format(
+                new_comment.article.title, new_comment.name)
+            uri = request.build_absolute_uri(new_comment.get_absolute_url())
+            message = '{} wrote:\n"{}"\nView on site: {}'.format(
+                new_comment.name, new_comment.text, uri)
+            
+            mail_admins(subject, message)
             return HttpResponseRedirect(new_comment.get_absolute_url())
 

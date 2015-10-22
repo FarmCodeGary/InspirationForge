@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'blog',
     'bootstrap3',
 )
@@ -93,4 +94,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+
+# Sites framework
+SITE_ID = 1
 

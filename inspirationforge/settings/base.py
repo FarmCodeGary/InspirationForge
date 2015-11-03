@@ -34,6 +34,33 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(
 SECRET_KEY = get_secret("SECRET_KEY")
 
 
+
+# Database
+# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': get_secret("DATABASE_NAME"),
+        'USER': get_secret("DATABASE_USER"),
+        'PASSWORD': get_secret("DATABASE_PASSWORD"),
+        'HOST': get_secret("DATABASE_HOST"),
+        'PORT': get_secret("DATABASE_PORT"),
+    }
+}
+
+
+# E-mail settings
+DEFAULT_FROM_EMAIL = get_secret("DEFAULT_FROM_EMAIL")
+SERVER_EMAIL = get_secret("SERVER_EMAIL")
+EMAIL_HOST = get_secret("EMAIL_HOST")
+EMAIL_PORT = get_secret("EMAIL_PORT")
+EMAIL_HOST_USER = get_secret("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = get_secret("EMAIL_HOST_PASSWORD")
+EMAIL_USE_SSL = get_secret("EMAIL_USE_SSL")
+EMAIL_SUBJECT_PREFIX = "[Inspiration Forge] "
+
+
 # Application definition
 
 INSTALLED_APPS = (
@@ -97,4 +124,10 @@ USE_TZ = True
 
 # Sites framework
 SITE_ID = 1
+
+
+MEDIA_URL = "/media/"
+
+ADMINS = get_secret("ADMINS")
+
 

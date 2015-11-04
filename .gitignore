@@ -62,8 +62,12 @@ db.sqlite3
 # Temporary files
 *~
 
+# Heroku
+.env
+
 # Inspiration Forge-specific
 media/
 secrets.json
 deployment.txt
+venv/
 

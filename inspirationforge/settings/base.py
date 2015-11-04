@@ -11,53 +11,34 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os, json
+import os
 
 from django.core.exceptions import ImproperlyConfigured
 
-with open("secrets.json") as f:
-    secrets = json.loads(f.read())
-
-def get_secret(setting, secrets=secrets):
-    """Get the secret variable or raise explicit exception."""
-    try:
-        return secrets[setting]
-    except KeyError:
-        error_msg = "Set the {0} secret variable.".format(setting)
-        raise ImproperlyConfigured(error_msg)
-
+import dj_database_url
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(
     os.path.abspath(__file__))))
 
 
-SECRET_KEY = get_secret("SECRET_KEY")
+SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 
 
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': get_secret("DATABASE_NAME"),
-        'USER': get_secret("DATABASE_USER"),
-        'PASSWORD': get_secret("DATABASE_PASSWORD"),
-        'HOST': get_secret("DATABASE_HOST"),
-        'PORT': get_secret("DATABASE_PORT"),
-    }
-}
+DATABASES = {'default':  dj_database_url.config()}
 
 
 # E-mail settings
-DEFAULT_FROM_EMAIL = get_secret("DEFAULT_FROM_EMAIL")
-SERVER_EMAIL = get_secret("SERVER_EMAIL")
-EMAIL_HOST = get_secret("EMAIL_HOST")
-EMAIL_PORT = get_secret("EMAIL_PORT")
-EMAIL_HOST_USER = get_secret("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = get_secret("EMAIL_HOST_PASSWORD")
-EMAIL_USE_SSL = get_secret("EMAIL_USE_SSL")
+DEFAULT_FROM_EMAIL = os.environ["DJANGO_DEFAULT_FROM_EMAIL"]
+SERVER_EMAIL = os.environ["DJANGO_SERVER_EMAIL"]
+EMAIL_HOST = os.environ["DJANGO_EMAIL_HOST"]
+EMAIL_PORT = os.environ["DJANGO_EMAIL_PORT"]
+EMAIL_HOST_USER = os.environ["DJANGO_EMAIL_HOST_USER"]
+EMAIL_HOST_PASSWORD = os.environ["DJANGO_EMAIL_HOST_PASSWORD"]
+EMAIL_USE_SSL = (os.environ["DJANGO_EMAIL_USE_SSL"] == 'true')
 EMAIL_SUBJECT_PREFIX = "[Inspiration Forge] "
 
 
@@ -112,13 +93,9 @@ WSGI_APPLICATION = 'inspirationforge.wsgi.application'
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'America/Detroit'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 
@@ -128,6 +105,6 @@ SITE_ID = 1
 
 MEDIA_URL = "/media/"
 
-ADMINS = get_secret("ADMINS")
+ADMINS = ((os.environ["DJANGO_ADMIN_NAME"], os.environ["DJANGO_ADMIN_EMAIL"]),)
 
 

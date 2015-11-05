@@ -5,8 +5,7 @@ DEBUG = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-# TODO: Add MEDIA_ROOT setting.
-#MEDIA_ROOT = get_secret("MEDIA_ROOT")
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Security-related settings
 ALLOWED_HOSTS = ["*"]

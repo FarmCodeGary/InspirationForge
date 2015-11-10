@@ -54,6 +54,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'blog',
     'bootstrap3',
+    'storages',
 )
 
 MIDDLEWARE_CLASSES = (

@@ -7,6 +7,7 @@ from django.utils import timezone
 from .models import Article, Comment, Tag
 from .views import ArticleView, IndexView, TagView
 
+
 def create_article(title, source_text="test article text", days_in_past=0):
     """
     Creates an article with the given title and optionally the given text and
@@ -93,7 +94,7 @@ class ArticleViewTests(TestCase):
             { 'name': 'John', 'text': 'Test comment!' },
             follow = True,
         )
-        self.assertContains(response, 'Test comment!', status_code=200)
+        self.assertContains(response, '<p>Test comment!</p>', status_code=200)
         self.assertContains(response, 'John')
     
     def test_post_comment_without_text(self):
@@ -108,6 +109,10 @@ class ArticleViewTests(TestCase):
             follow = True,
         )
         self.assertContains(response, 'John')
+        
+        # Make sure "John" isn't part of a posted comment in a heading:
+        self.assertNotContains(response, 'John</h3>')
+        
         self.assertContains(response, 'This field is required.')
     
     def test_post_comment_without_name(self):
@@ -122,5 +127,6 @@ class ArticleViewTests(TestCase):
             follow = True,
         )
         self.assertContains(response, 'Test comment!')
+        self.assertNotContains(response, '<p>Test comment!</p>')
         self.assertContains(response, 'This field is required.')
     

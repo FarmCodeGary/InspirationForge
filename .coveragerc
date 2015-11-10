@@ -8,4 +8,5 @@ omit =
     */admin.py
     inspirationforge/wsgi.py
     */migrations/*
+    venv/*
 

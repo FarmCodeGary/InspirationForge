@@ -107,7 +107,10 @@ class ArticleView(DetailView):
     
     def post(self, request, *args, **kwargs):
         """
-        A POST request is used to submit a comment on the given article.
+        A `POST` request is used to submit a comment on the given article.
+        If the comment is successfully posted, redirect to the same page
+        but with a bookmark to the new comment. Otherwise, render the page
+        with the form errors.
         """
         self.object = self.get_object()
         form = CommentForm(request.POST)

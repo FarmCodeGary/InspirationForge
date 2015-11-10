@@ -1,6 +1,7 @@
-import os.path
+import os.path, datetime
 
 from django.test import TestCase
+from django.utils import timezone
 
 from .models import Article, image_filename
 
@@ -13,9 +14,24 @@ class ArticleMethodTests(TestCase):
         article = Article(title="test article", source_text=source_text)
         article.save()
         self.assertEqual(article.text.strip(), "<p>Test post text</p>")
-
-
-
+    
+    
+    def test_published_articles(self):
+        """
+        published_articles() should include only articles with a pub_date in
+        the past, with the most recent articles first.
+        """
+        past_article = Article.objects.create(title="Past Article",
+            source_text="test",
+            pub_date=(timezone.now() + datetime.timedelta(days=-1)))
+        future_article = Article.objects.create(title="Future Article",
+            source_text="test",
+            pub_date=(timezone.now() + datetime.timedelta(days=1)))
+        current_article = Article.objects.create(title="Current Article",
+            source_text="test",
+            pub_date=timezone.now())
+        self.assertQuerysetEqual(Article.published_articles(),
+            ['<Article: Current Article>', '<Article: Past Article>'])
 
 
 class ImageFilenameTests(TestCase):

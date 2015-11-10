@@ -5,9 +5,11 @@ from django.core.urlresolvers import reverse
 
 import markdown
 
+
 class Tag(models.Model):
     """
-    Model representing a Tag (used for tagging blog posts with a short phrase).
+    Django model representing a Tag (used for tagging blog posts with a
+    short phrase).
     """
     name = models.CharField(max_length=30, unique=True)
     slug = models.SlugField(max_length=30, unique=True)
@@ -30,7 +32,7 @@ class Tag(models.Model):
 
 class Article(models.Model):
     """
-    Model representing articles (posts) on the blog.
+    Django model representing articles (posts) on the blog.
     
     The blog's `source_text` is its text in Markdown format.
     """
@@ -48,12 +50,16 @@ class Article(models.Model):
         return self.title
     
     def get_absolute_url(self):
+        """
+        URL with the year, the 2-digit month, and the article slug.
+        (The specific format is determined in urls.py.)
+        """
         return reverse('blog:article', args=[self.pub_date.year,
             "{:02d}".format(self.pub_date.month), self.slug])
     
     def save(self, *args, **kwargs):
         """
-        Before saving, populated the `text` field with HTML generated from the
+        Before saving, populates the `text` field with HTML generated from the
         Markdown in the `source_text`.
         """
         html = markdown.markdown(self.source_text)
@@ -74,7 +80,7 @@ class Article(models.Model):
 
 class Comment(models.Model):
     """"
-    Model for a comment on a blog article.
+    Django model for a comment on a blog article.
     """
     article = models.ForeignKey(Article)
     name = models.CharField(max_length=30)
@@ -85,8 +91,7 @@ class Comment(models.Model):
         ordering = ['-pub_date']
     
     def __str__(self):
-        return '{} on "{}" at {}'.format(self.name,
-            self.article.title, self.pub_date)
+        return '{} on "{}"'.format(self.name, self.article.title)
     
     def get_absolute_url(self):
         return self.article.get_absolute_url() + "#comment-" + str(self.pk)
@@ -106,7 +111,7 @@ def image_filename(instance, filename):
 
 class Image(models.Model):
     """
-    Model representing an uploaded Image.
+    Django model representing an uploaded Image.
     """
     name = models.CharField(max_length=50)
     media_file = models.ImageField(upload_to=image_filename)

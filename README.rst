@@ -5,5 +5,5 @@ Inspiration Forge is a blog focused on providing creative sparks, especially for
 
 For now, this project is simply a blog engine. I created it to teach myself Django and to build a foundation for future explorations into procedurally-generated creative aids.
 
-Inspiration Forge makes use of Django, Postgres, Bootstrap 3, Gunicorn, and Heroku.
+Inspiration Forge makes use of Django, Postgres, Bootstrap 3, Gunicorn, Heroku, and Amazon AWS S3.
 

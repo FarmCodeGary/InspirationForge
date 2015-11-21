@@ -1,3 +1,8 @@
+"""
+Unit tests for the blog app's Django models.
+"""
+
+
 import os.path, datetime
 
 from django.test import TestCase
@@ -6,6 +11,10 @@ from django.utils import timezone
 from .models import Article, image_filename
 
 class ArticleMethodTests(TestCase):
+    """
+    Tests for methods of the Article model.
+    """
+    
     def test_save_generates_html(self):
         """
         save() should populate the article's text field with HTML.
@@ -21,13 +30,13 @@ class ArticleMethodTests(TestCase):
         published_articles() should include only articles with a pub_date in
         the past, with the most recent articles first.
         """
-        past_article = Article.objects.create(title="Past Article",
+        Article.objects.create(title="Past Article",
             source_text="test",
             pub_date=(timezone.now() + datetime.timedelta(days=-1)))
-        future_article = Article.objects.create(title="Future Article",
+        Article.objects.create(title="Future Article",
             source_text="test",
             pub_date=(timezone.now() + datetime.timedelta(days=1)))
-        current_article = Article.objects.create(title="Current Article",
+        Article.objects.create(title="Current Article",
             source_text="test",
             pub_date=timezone.now())
         self.assertQuerysetEqual(Article.published_articles(),
@@ -35,6 +44,10 @@ class ArticleMethodTests(TestCase):
 
 
 class ImageFilenameTests(TestCase):
+    """
+    Tests for fixing the filenames of images.
+    """
+    
     def test_with_spaces(self):
         """
         image_filename should convert spaces to hyphens.

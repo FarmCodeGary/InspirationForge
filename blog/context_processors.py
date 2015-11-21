@@ -1,4 +1,7 @@
-from django.utils import timezone
+"""
+Context processors for the blog app.
+"""
+
 from django.db.models import Count
 
 from .models import Article, Comment, Tag

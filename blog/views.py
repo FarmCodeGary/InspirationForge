@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator
 from django.core.mail import mail_admins
 
-from .models import Article, Tag
+from .models import Article, Tag, Category
 from .forms import CommentForm
 
 class IndexView(ListView):
@@ -73,6 +73,27 @@ class TagView(IndexView):
     def get_page_heading(self):
         tag = Tag.objects.get(slug__exact=self.kwargs['slug'])
         return 'Posts tagged "{}"'.format(tag.name)
+
+
+class CategoryView(IndexView):
+    """
+    A list view that displays all published blog posts in a given category.
+    """
+    def get_queryset(self):
+        """
+        Uses a keyword argument `slug` to choose a category, and gets all
+        published articles in the category.
+        """
+        slug = self.kwargs['slug']
+        return Article.published_articles().filter(category__slug__exact=slug)
+    
+    def get_page_title(self):
+        tag = Category.objects.get(slug__exact=self.kwargs['slug'])
+        return 'Category: {}'.format(tag.name)
+    
+    def get_page_heading(self):
+        tag = Category.objects.get(slug__exact=self.kwargs['slug'])
+        return 'Category: {}'.format(tag.name)
 
 
 class ArticleView(DetailView):

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Article, Comment, Tag, Image
+from .models import Article, Comment, Tag, Image, Category
 
 class CommentInline(admin.TabularInline):
     model = Comment
@@ -8,8 +8,21 @@ class CommentInline(admin.TabularInline):
 
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
-    fields = ['pub_date', 'title', 'slug', 'tags', 'source_text']
-    list_display = ('title', 'pub_date')
+    fieldsets = (
+        (None, {
+            'fields': ('title', 'slug', 'category', 'pub_date', 'tags'),
+        }),
+        ('RSS enclosure', {
+            'classes': ('collapse',),
+            'fields': ('enclosure_url', 'enclosure_length',
+                'enclosure_mime_type'),
+        }),
+        ('Content', {
+            'fields': ('source_text',),
+        }),
+    )
+    
+    list_display = ('title', 'category', 'pub_date')
     list_filter = ['pub_date']
     inlines = [CommentInline]
     
@@ -25,4 +38,5 @@ class CommentAdmin(admin.ModelAdmin):
 
 admin.site.register(Tag)
 admin.site.register(Image)
+admin.site.register(Category)
 

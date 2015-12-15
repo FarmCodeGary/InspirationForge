@@ -1,14 +1,18 @@
-<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
+<a href="{{ article.category.get_absolute_url }}">
+  {{ article.category }}
+</a>
+&nbsp;<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
 {{ article.pub_date|date:"l, F j, Y" }}
 {% if article.tags.all %}
-  <span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
+  &nbsp;<span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
   {% for tag in article.tags.all %}
     <a href="{{ tag.get_absolute_url }}">
       {{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
   {% endfor %}
 {% endif %}
 {% if article.comment_set.all %}
-  <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+  &nbsp;<span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
   <a href="{{ article.get_absolute_url }}#comments">
     {{ article.comment_set.all|length }}
     {% if article.comment_set.all|length > 1 %}

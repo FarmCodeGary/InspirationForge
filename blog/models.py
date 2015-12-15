@@ -5,6 +5,33 @@ from django.core.urlresolvers import reverse
 
 import markdown
 
+DEFAULT_CATEGORY_ID = 1
+
+class Category(models.Model):
+    """
+    Django model representing a Category for a blog article.
+    """
+    name = models.CharField(max_length=30, unique=True)
+    slug = models.SlugField(max_length=30, unique=True)
+    
+    class Meta:
+        verbose_name_plural = "categories"
+    
+    def __str__(self):
+        return self.name
+    
+    def get_absolute_url(self):
+        return reverse('blog:category', args=[self.slug])
+    
+    def save(self, *args, **kwargs):
+        """
+        Before saving to the database, automatically generates a slug (if
+        one was not given).
+        """
+        if self.slug == None or self.slug == "":
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
 
 class Tag(models.Model):
     """
@@ -36,12 +63,21 @@ class Article(models.Model):
     
     The blog's `source_text` is its text in Markdown format.
     """
+    MIME_TYPE_CHOICES = (
+        ('audio/mpeg', 'audio/mpeg (e.g. MP3)'),
+    )
+    
     title = models.CharField(max_length=100)
     source_text = models.TextField()
     text = models.TextField(editable=False)
     slug = models.SlugField(max_length=100, unique_for_month='pub_date')
     pub_date = models.DateTimeField('date published', default=timezone.now)
+    category = models.ForeignKey(Category, default=DEFAULT_CATEGORY_ID)
     tags = models.ManyToManyField(Tag, blank=True)
+    enclosure_url = models.URLField(blank=True)
+    enclosure_length = models.BigIntegerField(blank=True, null=True)
+    enclosure_mime_type = models.CharField(max_length=50,
+        choices=MIME_TYPE_CHOICES, blank=True)
     
     class Meta:
         ordering = ['-pub_date']

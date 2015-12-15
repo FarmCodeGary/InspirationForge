@@ -10,7 +10,8 @@
 
 .blog-heading h1,
 .blog-heading h2,
-.blog-heading h3 {
+.blog-heading h3,
+.index-heading {
   margin-top: 0px;
 }
 

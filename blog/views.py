@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator
 from django.core.mail import mail_admins
+from django.core.urlresolvers import reverse
 
 from .models import Article, Tag, Category
 from .forms import CommentForm
@@ -36,6 +37,7 @@ class IndexView(ListView):
         context = super().get_context_data(**kwargs)
         context['page_title'] = self.get_page_title()
         context['page_heading'] = self.get_page_heading()
+        context['page_url_prefix'] = self.get_page_url_prefix()
         return context
     
     def get_page_title(self):
@@ -52,12 +54,16 @@ class IndexView(ListView):
         a specific heading.)
         """
         return None
+    
+    def get_page_url_prefix(self):
+        return reverse("blog:index") + "page/"
 
 
 class TagView(IndexView):
     """
     A list view that displays all published blog posts with a given tag.
     """
+    
     def get_queryset(self):
         """
         Uses a keyword argument `slug` to choose a tag, and gets all
@@ -73,12 +79,16 @@ class TagView(IndexView):
     def get_page_heading(self):
         tag = Tag.objects.get(slug__exact=self.kwargs['slug'])
         return 'Posts tagged "{}"'.format(tag.name)
+    
+    def get_page_url_prefix(self):
+        return reverse("blog:tag", args=[self.kwargs['slug']]) + "page/"
 
 
 class CategoryView(IndexView):
     """
     A list view that displays all published blog posts in a given category.
     """
+    
     def get_queryset(self):
         """
         Uses a keyword argument `slug` to choose a category, and gets all
@@ -94,6 +104,9 @@ class CategoryView(IndexView):
     def get_page_heading(self):
         tag = Category.objects.get(slug__exact=self.kwargs['slug'])
         return 'Category: {}'.format(tag.name)
+    
+    def get_page_url_prefix(self):
+        return reverse("blog:category", args=[self.kwargs['slug']]) + "page/"
 
 
 class ArticleView(DetailView):

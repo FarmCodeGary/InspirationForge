@@ -42,25 +42,21 @@
         <ul class="pagination">
           {% if page_obj.has_previous %}
             <li>
-              <a href="{% url 'blog:indexpage' page_obj.previous_page_number %}" aria-label="Previous">
+              <a href="{{ page_url_prefix }}{{ page_obj.previous_page_number }}/" aria-label="Previous">
                 <span aria-hiden="true">&laquo;</span>
               </a>
             </li>
           {% endif %}
           {% for num in paginator.page_range %}
             <li>
-              {% if num == 1 %}
-                <a href="{% url 'blog:index' %}">
-              {% else %}
-                <a href="{% url 'blog:indexpage' num %}">
-              {% endif %}
-                  {{ num }}
-                </a>
+              <a href="{{ page_url_prefix }}{{ num }}/">
+                {{ num }}
+              </a>
             <li>
           {% endfor %}
           {% if page_obj.has_next %}
             <li>
-              <a href="{% url 'blog:indexpage' page_obj.next_page_number %}" aria-label="Next">
+              <a href="{{ page_url_prefix }}{{ page_obj.next_page_number }}/" aria-label="Next">
                 <span aria-hiden="true">&raquo;</span>
               </a>
             </li>

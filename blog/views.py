@@ -37,6 +37,7 @@ class IndexView(ListView):
         context = super().get_context_data(**kwargs)
         context['page_title'] = self.get_page_title()
         context['page_heading'] = self.get_page_heading()
+        context['page_description'] = self.get_page_description()
         context['page_url_prefix'] = self.get_page_url_prefix()
         return context
     
@@ -52,6 +53,14 @@ class IndexView(ListView):
         """
         Returns None. (This can be overridden in a subclass to give the page
         a specific heading.)
+        """
+        return None
+    
+    def get_page_description(self):
+        """
+        Returns None. This can be overridden by a subclass to give the page
+        a description, appearing on each page after the heading and before
+        the items.
         """
         return None
     
@@ -98,12 +107,22 @@ class CategoryView(IndexView):
         return Article.published_articles().filter(category__slug__exact=slug)
     
     def get_page_title(self):
-        tag = Category.objects.get(slug__exact=self.kwargs['slug'])
-        return 'Category: {}'.format(tag.name)
+        category = Category.objects.get(slug__exact=self.kwargs['slug'])
+        return category.name
     
     def get_page_heading(self):
-        tag = Category.objects.get(slug__exact=self.kwargs['slug'])
-        return 'Category: {}'.format(tag.name)
+        category = Category.objects.get(slug__exact=self.kwargs['slug'])
+        if category.title:
+            return category.title
+        else:
+            return 'Category: {}'.format(category.name)
+    
+    def get_page_description(self):
+        category = Category.objects.get(slug__exact=self.kwargs['slug'])
+        if category.description:
+            return category.description
+        else:
+            return super().get_page_description()
     
     def get_page_url_prefix(self):
         return reverse("blog:category", args=[self.kwargs['slug']]) + "page/"

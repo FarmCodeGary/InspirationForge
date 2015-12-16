@@ -15,6 +15,9 @@ class LatestArticlesFeed(Feed):
     title = "Inspiration Forge"
     description = "Ideas for Nerds!" # TODO: Make this come from settings?
     
+    def author_name(self):
+        return "Inspiration Forge"
+    
     def link(self):
         return reverse("blog:rssfeed")
     
@@ -29,6 +32,11 @@ class LatestArticlesFeed(Feed):
     
     def item_pubdate(self, item):
         return item.pub_date
+    
+    def item_author_name(self, item):
+        return ", ".join(
+            [str(contributor) for contributor in item.contributors.all()]
+        )
     
     def item_enclosure_url(self, item):
         if item.enclosure_url.strip():
@@ -51,13 +59,19 @@ class CategoryFeed(LatestArticlesFeed):
     A feed for a specific category of article.
     """
     def title(self, obj):
-        return "Inspiration Forge: {}".format(obj.name)
+        if obj.title:
+            return obj.title
+        else:
+            return "Inspiration Forge: {}".format(obj.name)
     
     def link(self, obj):
         return reverse("blog:categoryfeed", args=[obj.slug])
     
     def description(self, obj):
-        return "Ideas for Nerds! ({})".format(obj.name)
+        if obj.description:
+            return obj.description
+        else:
+            return "Ideas for Nerds! ({})".format(obj.name)
     
     def items(self, obj):
         return super().items().filter(category=obj)

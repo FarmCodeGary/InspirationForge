@@ -14,6 +14,10 @@ class Category(models.Model):
     """
     name = models.CharField(max_length=30, unique=True)
     slug = models.SlugField(max_length=30, unique=True)
+    title = models.CharField(max_length=50, blank=True)
+    """Title for the category, used on its index page and RSS feed."""
+    description = models.TextField(blank=True)
+    """Description for the category, used on its index page and RSS feed."""
     
     class Meta:
         verbose_name_plural = "categories"

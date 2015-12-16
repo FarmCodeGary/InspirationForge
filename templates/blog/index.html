@@ -16,6 +16,10 @@
       <h1 class="index-heading">{{ page_heading }}</h1>
     {% endif %}
   {% endblock heading %}
+  
+  {% if page_description %}
+    <p>{{ page_description }}</p>
+  {% endif %}
 
   {% for article in article_list %}
   <div class="panel panel-default">

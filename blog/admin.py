@@ -10,7 +10,8 @@ class CommentInline(admin.TabularInline):
 class ArticleAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
-            'fields': ('title', 'slug', 'category', 'pub_date', 'tags'),
+            'fields': ('title', 'slug', 'category', 'contributors',
+                'pub_date', 'tags'),
         }),
         ('RSS enclosure', {
             'classes': ('collapse',),

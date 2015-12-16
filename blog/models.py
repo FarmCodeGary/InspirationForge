@@ -63,14 +63,11 @@ class Contributor(models.Model):
     Django model representing a contributor (writer, podcast host/guest, etc.)
     """
     display_name = models.CharField(max_length=50)
-    slug = models.SlugField(max_length=50)
+    slug = models.SlugField(max_length=50) # will be used in the future
     user = models.ForeignKey(User, blank=True, null=True)
     
     def __str__(self):
         return self.display_name
-    
-    def get_absolute_url(self):
-        return reverse('blog:contributor', args=[self.slug])
     
     def save(self, *args, **kwargs):
         """
@@ -99,6 +96,8 @@ class Article(models.Model):
     pub_date = models.DateTimeField('date published', default=timezone.now)
     category = models.ForeignKey(Category, default=DEFAULT_CATEGORY_ID)
     tags = models.ManyToManyField(Tag, blank=True)
+    contributors = models.ManyToManyField(Contributor)
+    
     enclosure_url = models.URLField(blank=True)
     enclosure_length = models.BigIntegerField(blank=True, null=True)
     enclosure_mime_type = models.CharField(max_length=50,

@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.text import slugify
 from django.core.urlresolvers import reverse
+from django.contrib.auth.models import User
 
 import markdown
 
@@ -54,6 +55,30 @@ class Tag(models.Model):
         """
         if self.slug == None or self.slug == "":
             self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+
+class Contributor(models.Model):
+    """
+    Django model representing a contributor (writer, podcast host/guest, etc.)
+    """
+    display_name = models.CharField(max_length=50)
+    slug = models.SlugField(max_length=50)
+    user = models.ForeignKey(User, blank=True, null=True)
+    
+    def __str__(self):
+        return self.display_name
+    
+    def get_absolute_url(self):
+        return reverse('blog:contributor', args=[self.slug])
+    
+    def save(self, *args, **kwargs):
+        """
+        Before saving to the database, automatically generates a slug (if
+        one was not given).
+        """
+        if self.slug == None or self.slug == "":
+            self.slug = slugify(self.display_name)
         super().save(*args, **kwargs)
 
 

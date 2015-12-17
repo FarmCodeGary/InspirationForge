@@ -101,6 +101,22 @@
           </div>
         </div>
         
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Contributors</h3>
+          </div>
+          <div class="panel-body">
+            <p>
+              {% for contributor in contributors %}
+                <a href="{{ contributor.get_absolute_url }}">
+                  {{ contributor.display_name }}
+                </a>
+                ({{ contributor.num_articles }}){% if not forloop.last %}, {% endif%}
+              {% endfor %}
+            </p>
+          </div>
+        </div>
+        
         {% include "snippets/_social_links.html" %}
         {% include "snippets/_blogroll.html" %}
         

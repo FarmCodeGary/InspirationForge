@@ -79,18 +79,17 @@ class TagView(IndexView):
         published articles with the tag.
         """
         slug = self.kwargs['slug']
-        return Article.published_articles().filter(tags__slug__exact=slug)
+        self.tag = Tag.objects.get(slug__exact=slug)
+        return Article.published_articles().filter(tags=self.tag)
     
     def get_page_title(self):
-        tag = Tag.objects.get(slug__exact=self.kwargs['slug'])
-        return 'Posts tagged "{}"'.format(tag.name)
+        return 'Posts tagged "{}"'.format(self.tag.name)
     
     def get_page_heading(self):
-        tag = Tag.objects.get(slug__exact=self.kwargs['slug'])
-        return 'Posts tagged "{}"'.format(tag.name)
+        return 'Posts tagged "{}"'.format(self.tag.name)
     
     def get_page_url_prefix(self):
-        return reverse("blog:tag", args=[self.kwargs['slug']]) + "page/"
+        return self.tag.get_absolute_url() + "page/"
 
 
 class CategoryView(IndexView):
@@ -104,28 +103,28 @@ class CategoryView(IndexView):
         published articles in the category.
         """
         slug = self.kwargs['slug']
-        return Article.published_articles().filter(category__slug__exact=slug)
+        self.category = Category.objects.get(slug__exact=slug)
+        return Article.published_articles().filter(category=self.category)
     
     def get_page_title(self):
-        category = Category.objects.get(slug__exact=self.kwargs['slug'])
-        return category.name
+        return self.category.name
     
     def get_page_heading(self):
-        category = Category.objects.get(slug__exact=self.kwargs['slug'])
-        if category.title:
-            return category.title
+        title = self.category.title
+        if title:
+            return title
         else:
-            return 'Category: {}'.format(category.name)
+            return 'Category: {}'.format(self.category.name)
     
     def get_page_description(self):
-        category = Category.objects.get(slug__exact=self.kwargs['slug'])
-        if category.description:
-            return category.description
+        description = self.category.description
+        if description:
+            return description
         else:
             return super().get_page_description()
     
     def get_page_url_prefix(self):
-        return reverse("blog:category", args=[self.kwargs['slug']]) + "page/"
+        return self.category.get_absolute_url() + "page/"
 
 
 class ArticleView(DetailView):

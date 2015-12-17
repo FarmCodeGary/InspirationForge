@@ -6,9 +6,9 @@ class CommentForm(ModelForm):
         model = Comment
         fields = ['name', 'text']
         widgets = {
-            'name': TextInput(attrs={'placeholder': 'Name'}),
+            'name': TextInput(attrs={'placeholder': 'Your name here'}),
             'text': Textarea(attrs=
-                {'placeholder': 'Enter your comment here...'}
+                {'placeholder': 'Your comment here'}
             ),
         }
 

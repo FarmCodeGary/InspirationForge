@@ -152,7 +152,7 @@ class Comment(models.Model):
     pub_date = models.DateTimeField('date published', default=timezone.now)
     
     class Meta:
-        ordering = ['-pub_date']
+        ordering = ['pub_date']
     
     def __str__(self):
         return '{} on "{}"'.format(self.name, self.article.title)

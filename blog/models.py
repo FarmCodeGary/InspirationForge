@@ -95,7 +95,7 @@ class Article(models.Model):
     
     title = models.CharField(max_length=100)
     source_text = models.TextField()
-    text = models.TextField(editable=False)
+    rendered_text = models.TextField(editable=False)
     slug = models.SlugField(max_length=100, unique_for_month='pub_date')
     pub_date = models.DateTimeField('date published', default=timezone.now)
     category = models.ForeignKey(Category, default=DEFAULT_CATEGORY_ID)
@@ -127,7 +127,7 @@ class Article(models.Model):
         Markdown in the `source_text`.
         """
         html = markdown.markdown(self.source_text)
-        self.text = html
+        self.rendered_text = html
         if self.slug == None or self.slug == "":
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)

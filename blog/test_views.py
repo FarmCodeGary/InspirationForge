@@ -77,7 +77,8 @@ class TagViewTests(TestCase):
 class ArticleViewTests(TestCase):
     def test_without_leading_zero_on_month(self):
         pub_date = timezone.make_aware(datetime.datetime(2013, 9, 15))
-        article = Article.objects.create(title="testarticle", source_text="testbody",
+        article = Article.objects.create(title="testarticle",
+            source_text="testbody",
             pub_date=pub_date)
         response = self.client.get(reverse('blog:article',
             args=['2013','9','testarticle']))

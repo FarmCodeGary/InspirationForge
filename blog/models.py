@@ -8,14 +8,42 @@ import markdown
 
 DEFAULT_CATEGORY_ID = 1
 
+class ContentInfo(models.Model):
+    """
+    Abstract model used as base for models, providing a `source_text` field
+    (for Markdown-format content) which, when the model is saved, gets
+    rendered into html and stored in `rendered_text`.
+    """
+    class Meta:
+        abstract = True
+    
+    source_text = models.TextField()
+    rendered_text = models.TextField(editable=False)
+    
+    def save(self, *args, **kwargs):
+        """
+        Before saving, populates the `rendered_text` field with HTML 
+        generated from the Markdown in the `source_text`.
+        """
+        html = markdown.markdown(self.source_text)
+        self.rendered_text = html
+        if self.slug == None or self.slug == "":
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
+
 class Category(models.Model):
     """
     Django model representing a Category for a blog article.
     """
+    
     name = models.CharField(max_length=30, unique=True)
+    """Name of the category used in navigation, etc."""
     slug = models.SlugField(max_length=30, unique=True)
     title = models.CharField(max_length=50, blank=True)
-    """Title for the category, used on its index page and RSS feed."""
+    """
+    Title for the category, used on its index page and RSS feed (optional).
+    """
     description = models.TextField(blank=True)
     """Description for the category, used on its index page and RSS feed."""
     
@@ -83,7 +111,7 @@ class Contributor(models.Model):
         super().save(*args, **kwargs)
 
 
-class Article(models.Model):
+class Article(ContentInfo):
     """
     Django model representing articles (posts) on the blog.
     
@@ -94,8 +122,6 @@ class Article(models.Model):
     )
     
     title = models.CharField(max_length=100)
-    source_text = models.TextField()
-    rendered_text = models.TextField(editable=False)
     slug = models.SlugField(max_length=100, unique_for_month='pub_date')
     pub_date = models.DateTimeField('date published', default=timezone.now)
     category = models.ForeignKey(Category, default=DEFAULT_CATEGORY_ID)
@@ -120,17 +146,6 @@ class Article(models.Model):
         """
         return reverse('blog:article', args=[self.pub_date.year,
             "{:02d}".format(self.pub_date.month), self.slug])
-    
-    def save(self, *args, **kwargs):
-        """
-        Before saving, populates the `text` field with HTML generated from the
-        Markdown in the `source_text`.
-        """
-        html = markdown.markdown(self.source_text)
-        self.rendered_text = html
-        if self.slug == None or self.slug == "":
-            self.slug = slugify(self.title)
-        super().save(*args, **kwargs)
     
     @staticmethod
     def published_articles():

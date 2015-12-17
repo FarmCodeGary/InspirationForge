@@ -5,7 +5,8 @@
 {% if article.contributors.all %}
   &nbsp;<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
   {% for contributor in article.contributors.all %}
-    {{ contributor.display_name }}{% if not forloop.last %}, {% endif %}
+    <a href="{{ contributor.get_absolute_url }}">
+    {{ contributor.display_name }}</a>{% if not forloop.last %}, {% endif %}
   {% endfor %}
 {% endif %}
 &nbsp;<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>

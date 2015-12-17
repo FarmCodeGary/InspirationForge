@@ -9,6 +9,8 @@ urlpatterns = [
         views.ArticleView.as_view(), name='article'),
     url(r'^tag/(?P<slug>[a-z0-9_-]+)/(?:page/(?P<page>[0-9]+)/)?$',
         views.TagView.as_view(), name='tag'),
+    url(r'^contributor/(?P<slug>[a-z0-9_-]+)/(?:page/(?P<page>[0-9]+)/)?$',
+        views.ContributorView.as_view(), name='contributor'),
     url(r'^feed/$', feeds.LatestArticlesFeed(), name='rssfeed'),
     url(r'^(?P<slug>[a-z0-9_-]+)/(?:page/(?P<page>[0-9]+)/)?$',
         views.CategoryView.as_view(), name='category'),

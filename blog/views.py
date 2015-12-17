@@ -8,7 +8,7 @@ from django.core.paginator import Paginator
 from django.core.mail import mail_admins
 from django.core.urlresolvers import reverse
 
-from .models import Article, Tag, Category
+from .models import Article, Tag, Category, Contributor
 from .forms import CommentForm
 
 class IndexView(ListView):
@@ -37,7 +37,7 @@ class IndexView(ListView):
         context = super().get_context_data(**kwargs)
         context['page_title'] = self.get_page_title()
         context['page_heading'] = self.get_page_heading()
-        context['page_description'] = self.get_page_description()
+        context['page_content'] = self.get_page_content()
         context['page_url_prefix'] = self.get_page_url_prefix()
         return context
     
@@ -56,11 +56,11 @@ class IndexView(ListView):
         """
         return None
     
-    def get_page_description(self):
+    def get_page_content(self):
         """
         Returns None. This can be overridden by a subclass to give the page
-        a description, appearing on each page after the heading and before
-        the items.
+        some content (in html), appearing on each page after the heading and 
+        before the items.
         """
         return None
     
@@ -116,15 +116,38 @@ class CategoryView(IndexView):
         else:
             return 'Category: {}'.format(self.category.name)
     
-    def get_page_description(self):
+    def get_page_content(self):
         description = self.category.description
         if description:
-            return description
+            return "<p>" + description + "</p>"
         else:
-            return super().get_page_description()
+            return super().get_page_content()
     
     def get_page_url_prefix(self):
         return self.category.get_absolute_url() + "page/"
+
+
+class ContributorView(IndexView):
+
+    def get_queryset(self):
+        self.contributor = Contributor.objects.get(
+            slug__exact=self.kwargs['slug']
+        )
+        return Article.published_articles().filter(
+            contributors=self.contributor
+        )
+    
+    def get_page_title(self):
+        return self.contributor.display_name
+    
+    def get_page_heading(self):
+        return "Contributor: " + self.contributor.display_name
+    
+    def get_page_content(self):
+        return self.contributor.rendered_text
+    
+    def get_page_url_prefix(self):
+        return self.contributor.get_absolute_url() + "page/"
 
 
 class ArticleView(DetailView):

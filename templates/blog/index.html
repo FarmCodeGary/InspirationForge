@@ -17,8 +17,8 @@
     {% endif %}
   {% endblock heading %}
   
-  {% if page_description %}
-    <p>{{ page_description }}</p>
+  {% if page_content %}
+    {{ page_content|safe }}
   {% endif %}
 
   {% for article in article_list %}

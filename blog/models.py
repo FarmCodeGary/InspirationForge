@@ -17,16 +17,15 @@ class ContentInfo(models.Model):
     class Meta:
         abstract = True
     
-    source_text = models.TextField()
-    rendered_text = models.TextField(editable=False)
+    source_text = models.TextField(blank=True)
+    rendered_text = models.TextField(editable=False, blank=True)
     
     def save(self, *args, **kwargs):
         """
         Before saving, populates the `rendered_text` field with HTML 
         generated from the Markdown in the `source_text`.
         """
-        html = markdown.markdown(self.source_text)
-        self.rendered_text = html
+        self.rendered_text = markdown.markdown(self.source_text)
         if self.slug == None or self.slug == "":
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
@@ -90,7 +89,7 @@ class Tag(models.Model):
         super().save(*args, **kwargs)
 
 
-class Contributor(models.Model):
+class Contributor(ContentInfo):
     """
     Django model representing a contributor (writer, podcast host/guest, etc.)
     """
@@ -100,6 +99,9 @@ class Contributor(models.Model):
     
     def __str__(self):
         return self.display_name
+    
+    def get_absolute_url(self):
+        return reverse("blog:contributor", args=[self.slug])
     
     def save(self, *args, **kwargs):
         """

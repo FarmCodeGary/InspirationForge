@@ -89,20 +89,6 @@
         
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">Tags</h3>
-          </div>
-          <div class="panel-body">
-            <p>
-              {% for tag in tags %}
-                <a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>
-                ({{ tag.num_articles }}){% if not forloop.last %}, {% endif%}
-              {% endfor %}
-            </p>
-          </div>
-        </div>
-        
-        <div class="panel panel-default">
-          <div class="panel-heading">
             <h3 class="panel-title">Contributors</h3>
           </div>
           <div class="panel-body">
@@ -112,6 +98,20 @@
                   {{ contributor.display_name }}
                 </a>
                 ({{ contributor.num_articles }}){% if not forloop.last %}, {% endif%}
+              {% endfor %}
+            </p>
+          </div>
+        </div>
+        
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Tags</h3>
+          </div>
+          <div class="panel-body">
+            <p>
+              {% for tag in tags %}
+                <a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>
+                ({{ tag.num_articles }}){% if not forloop.last %}, {% endif%}
               {% endfor %}
             </p>
           </div>

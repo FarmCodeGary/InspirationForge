@@ -97,6 +97,9 @@ class Contributor(ContentInfo):
     slug = models.SlugField(max_length=50) # will be used in the future
     user = models.ForeignKey(User, blank=True, null=True)
     
+    class Meta:
+        ordering = ['id']
+    
     def __str__(self):
         return self.display_name
     

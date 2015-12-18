@@ -19,7 +19,7 @@ class ArticleAdmin(admin.ModelAdmin):
                 'enclosure_mime_type'),
         }),
         ('Content', {
-            'fields': ('source_text',),
+            'fields': ('content_source',),
         }),
     )
     

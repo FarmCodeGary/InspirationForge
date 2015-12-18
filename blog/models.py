@@ -10,22 +10,22 @@ DEFAULT_CATEGORY_ID = 1
 
 class ContentInfo(models.Model):
     """
-    Abstract model used as base for models, providing a `source_text` field
-    (for Markdown-format content) which, when the model is saved, gets
-    rendered into html and stored in `rendered_text`.
+    Abstract model used as base for models, providing a `content_source` field
+    (for Markdown-format content) which, when the model is saved, gets rendered
+    into html and stored in `rendered_content`.
     """
     class Meta:
         abstract = True
     
-    source_text = models.TextField(blank=True)
-    rendered_text = models.TextField(editable=False, blank=True)
+    content_source = models.TextField(blank=True)
+    rendered_content = models.TextField(editable=False, blank=True)
     
     def save(self, *args, **kwargs):
         """
-        Before saving, populates the `rendered_text` field with HTML 
-        generated from the Markdown in the `source_text`.
+        Before saving, populates the `rendered_content` field with HTML generated
+        from the Markdown in the `content_source`.
         """
-        self.rendered_text = markdown.markdown(self.source_text)
+        self.rendered_content = markdown.markdown(self.content_source)
         if self.slug == None or self.slug == "":
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
@@ -117,7 +117,7 @@ class Article(ContentInfo):
     """
     Django model representing articles (posts) on the blog.
     
-    The blog's `source_text` is its text in Markdown format.
+    The blog's `content_source` is its text in Markdown format.
     """
     MIME_TYPE_CHOICES = (
         ('audio/mpeg', 'audio/mpeg (e.g. MP3)'),

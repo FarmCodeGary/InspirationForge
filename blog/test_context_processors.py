@@ -7,7 +7,7 @@ from django.utils import timezone
 from .models import Article, Comment, Tag
 from .context_processors import latest_content
 
-def create_article(title, source_text="test article text", days_in_past=0):
+def create_article(title, content_source="test article text", days_in_past=0):
     """
     Creates an article with the given title and optionally the given text and
     number of days in the past. (Use a negative value for `days_in_past` to
@@ -15,7 +15,7 @@ def create_article(title, source_text="test article text", days_in_past=0):
     will have the default datetime of timezone.now().
     """
     time = timezone.now() + datetime.timedelta(days=-days_in_past)
-    return Article.objects.create(title=title, source_text=source_text,
+    return Article.objects.create(title=title, content_source=content_source,
                                   pub_date = time)
 
 class LatestContentTest(TestCase):

@@ -8,7 +8,7 @@ from .models import Article, Comment, Tag
 from .views import ArticleView, IndexView, TagView
 
 
-def create_article(title, source_text="test article text", days_in_past=0):
+def create_article(title, content_source="test article text", days_in_past=0):
     """
     Creates an article with the given title and optionally the given text and
     number of days in the past. (Use a negative value for `days_in_past` to
@@ -16,7 +16,7 @@ def create_article(title, source_text="test article text", days_in_past=0):
     will have the default datetime of timezone.now().
     """
     time = timezone.now() + datetime.timedelta(days=-days_in_past)
-    return Article.objects.create(title=title, source_text=source_text,
+    return Article.objects.create(title=title, content_source=content_source,
                                   pub_date = time)
 
 class IndexViewTests(TestCase):
@@ -36,10 +36,12 @@ class IndexViewTests(TestCase):
         Articles with a pub_date in the past should be displayed on the index
         page.
         """
-        article = create_article("Past article", days_in_past=1)
+        article = create_article("Past article", days_in_past=1,
+            content_source="test article text")
         response = self.client.get(reverse('blog:index'))
         self.assertContains(response, "<h3>{}</h3>".format(article.title),
                             status_code=200)
+        self.assertContains(response, "test article text")
         self.assertQuerysetEqual(response.context['article_list'],
             ['<Article: Past article>'])
     
@@ -64,7 +66,7 @@ class TagViewTests(TestCase):
         """
         tag = Tag.objects.create(name="test tag")
         article = Article.objects.create(title="Future article",
-            source_text = "This is a test article.",
+            content_source = "This is a test article.",
             pub_date = (timezone.now() + datetime.timedelta(days=1)),
         )
         article.tags.add(tag)
@@ -78,7 +80,7 @@ class ArticleViewTests(TestCase):
     def test_without_leading_zero_on_month(self):
         pub_date = timezone.make_aware(datetime.datetime(2013, 9, 15))
         article = Article.objects.create(title="testarticle",
-            source_text="testbody",
+            content_source="testbody",
             pub_date=pub_date)
         response = self.client.get(reverse('blog:article',
             args=['2013','9','testarticle']))

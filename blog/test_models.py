@@ -19,10 +19,10 @@ class ArticleMethodTests(TestCase):
         """
         save() should populate the article's text field with HTML.
         """
-        source_text = "Test post text"
-        article = Article(title="test article", source_text=source_text)
+        content_source = "Test post text"
+        article = Article(title="test article", content_source=content_source)
         article.save()
-        self.assertEqual(article.rendered_text.strip(),
+        self.assertEqual(article.rendered_content.strip(),
             "<p>Test post text</p>"
         )
     
@@ -33,13 +33,13 @@ class ArticleMethodTests(TestCase):
         the past, with the most recent articles first.
         """
         Article.objects.create(title="Past Article",
-            source_text="test",
+            content_source="test",
             pub_date=(timezone.now() + datetime.timedelta(days=-1)))
         Article.objects.create(title="Future Article",
-            source_text="test",
+            content_source="test",
             pub_date=(timezone.now() + datetime.timedelta(days=1)))
         Article.objects.create(title="Current Article",
-            source_text="test",
+            content_source="test",
             pub_date=timezone.now())
         self.assertQuerysetEqual(Article.published_articles(),
             ['<Article: Current Article>', '<Article: Past Article>'])

@@ -17,7 +17,7 @@
     </h1>
   {% endblock heading %}
   
-  <p>{{ category.description }}</p>
+  {{ category.rendered_content|safe }}
   
   {% include 'blog/_article_list.html' %}
 

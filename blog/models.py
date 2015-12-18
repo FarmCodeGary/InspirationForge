@@ -31,7 +31,7 @@ class ContentInfo(models.Model):
         super().save(*args, **kwargs)
 
 
-class Category(models.Model):
+class Category(ContentInfo):
     """
     Django model representing a Category for a blog article.
     """
@@ -44,7 +44,7 @@ class Category(models.Model):
     Title for the category, used on its index page and RSS feed (optional).
     """
     description = models.TextField(blank=True)
-    """Description for the category, used on its index page and RSS feed."""
+    """Description for the category, used on its RSS feed."""
     
     class Meta:
         verbose_name_plural = "categories"

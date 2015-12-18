@@ -1,0 +1,48 @@
+{% for article in article_list %}
+<div class="panel panel-default">
+  <div class="panel-heading blog-heading">
+    <a href="{{ article.get_absolute_url }}">
+      <h3>{{ article.title }}</h3>
+    </a>
+    <p>{% include 'blog/_article_metadata.html' %}</p>
+  </div>
+  
+  <div class="panel-body blog-content">
+    {{ article.rendered_text|safe|truncatewords_html:80 }}
+    <a href ="{{ article.get_absolute_url }}" class="btn btn-default read-post-btn">
+      Read Post
+    </a>
+  </div>
+</div>
+{% empty %}
+<p>No posts are available.</p>
+{% endfor %}
+{% if is_paginated %}
+  <nav>
+    <div class="text-center">
+      <ul class="pagination">
+        {% if page_obj.has_previous %}
+          <li>
+            <a href="{{ page_url_prefix }}{{ page_obj.previous_page_number }}/" aria-label="Previous">
+              <span aria-hiden="true">&laquo;</span>
+            </a>
+          </li>
+        {% endif %}
+        {% for num in paginator.page_range %}
+          <li>
+            <a href="{{ page_url_prefix }}{{ num }}/">
+              {{ num }}
+            </a>
+          <li>
+        {% endfor %}
+        {% if page_obj.has_next %}
+          <li>
+            <a href="{{ page_url_prefix }}{{ page_obj.next_page_number }}/" aria-label="Next">
+              <span aria-hiden="true">&raquo;</span>
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+{% endif %}

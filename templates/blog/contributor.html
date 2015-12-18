@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+  {{ contributor.display_name }} | {{ block.super }}
+{% endblock title %}
+
+
+{% block content %}
+  {% block heading %}
+    <h1 class="index-heading">
+      {{ contributor.display_name }}
+    </h1>
+  {% endblock heading %}
+  
+  {{ contributor.rendered_text|safe }}
+  
+  <h3>{{ contributor.display_name }} contributed to:</h3>
+
+  {% include 'blog/_article_list.html' %}
+
+{% endblock %}
+

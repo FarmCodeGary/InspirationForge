@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+  {{ category.name }} | {{ block.super }}
+{% endblock title %}
+
+
+{% block content %}
+  {% block heading %}
+    <h1 class="index-heading">
+      {% if category.title %}
+        {{ category.title }}
+      {% else %}
+        Category: {{ category.name }}
+      {% endif %}
+    </h1>
+  {% endblock heading %}
+  
+  <p>{{ category.description }}</p>
+  
+  {% include 'blog/_article_list.html' %}
+
+{% endblock %}
+

@@ -35,34 +35,8 @@ class IndexView(ListView):
         respectively).
         """
         context = super().get_context_data(**kwargs)
-        context['page_title'] = self.get_page_title()
-        context['page_heading'] = self.get_page_heading()
-        context['page_content'] = self.get_page_content()
         context['page_url_prefix'] = self.get_page_url_prefix()
         return context
-    
-    def get_page_title(self):
-        """
-        Returns None. (This can be overridden in a subclass to give the page
-        a specific HTML title. The actual title will still include the
-        site's title.)
-        """
-        return None
-    
-    def get_page_heading(self):
-        """
-        Returns None. (This can be overridden in a subclass to give the page
-        a specific heading.)
-        """
-        return None
-    
-    def get_page_content(self):
-        """
-        Returns None. This can be overridden by a subclass to give the page
-        some content (in html), appearing on each page after the heading and 
-        before the items.
-        """
-        return None
     
     def get_page_url_prefix(self):
         return reverse("blog:index") + "page/"
@@ -73,6 +47,8 @@ class TagView(IndexView):
     A list view that displays all published blog posts with a given tag.
     """
     
+    template_name = 'blog/tag.html'
+    
     def get_queryset(self):
         """
         Uses a keyword argument `slug` to choose a tag, and gets all
@@ -82,11 +58,10 @@ class TagView(IndexView):
         self.tag = Tag.objects.get(slug__exact=slug)
         return Article.published_articles().filter(tags=self.tag)
     
-    def get_page_title(self):
-        return 'Posts tagged "{}"'.format(self.tag.name)
-    
-    def get_page_heading(self):
-        return 'Posts tagged "{}"'.format(self.tag.name)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tag'] = self.tag
+        return context
     
     def get_page_url_prefix(self):
         return self.tag.get_absolute_url() + "page/"
@@ -97,6 +72,8 @@ class CategoryView(IndexView):
     A list view that displays all published blog posts in a given category.
     """
     
+    template_name = 'blog/category.html'
+    
     def get_queryset(self):
         """
         Uses a keyword argument `slug` to choose a category, and gets all
@@ -106,29 +83,19 @@ class CategoryView(IndexView):
         self.category = Category.objects.get(slug__exact=slug)
         return Article.published_articles().filter(category=self.category)
     
-    def get_page_title(self):
-        return self.category.name
-    
-    def get_page_heading(self):
-        title = self.category.title
-        if title:
-            return title
-        else:
-            return 'Category: {}'.format(self.category.name)
-    
-    def get_page_content(self):
-        description = self.category.description
-        if description:
-            return "<p>" + description + "</p>"
-        else:
-            return super().get_page_content()
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category'] = self.category
+        return context
     
     def get_page_url_prefix(self):
         return self.category.get_absolute_url() + "page/"
 
 
 class ContributorView(IndexView):
-
+    
+    template_name = 'blog/contributor.html'
+    
     def get_queryset(self):
         self.contributor = Contributor.objects.get(
             slug__exact=self.kwargs['slug']
@@ -137,14 +104,10 @@ class ContributorView(IndexView):
             contributors=self.contributor
         )
     
-    def get_page_title(self):
-        return self.contributor.display_name
-    
-    def get_page_heading(self):
-        return "Contributor: " + self.contributor.display_name
-    
-    def get_page_content(self):
-        return self.contributor.rendered_text
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['contributor'] = self.contributor
+        return context
     
     def get_page_url_prefix(self):
         return self.contributor.get_absolute_url() + "page/"

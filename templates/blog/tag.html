@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+  Posts tagged "{{ tag.name }}" | {{ block.super }}
+{% endblock title %}
+
+
+{% block content %}
+  {% block heading %}
+    <h1 class="index-heading">
+      Posts tagged "{{ tag.name }}"
+    </h1>
+  {% endblock heading %}
+
+  {% include 'blog/_article_list.html' %}
+
+{% endblock %}
+

@@ -13,8 +13,6 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
-from django.core.exceptions import ImproperlyConfigured
-
 import dj_database_url
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(
@@ -22,7 +20,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(
 
 
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
-
 
 
 # Database
@@ -73,7 +70,7 @@ ROOT_URLCONF = 'inspirationforge.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -107,5 +104,3 @@ SITE_ID = 1
 MEDIA_URL = "/media/"
 
 ADMINS = ((os.environ["DJANGO_ADMIN_NAME"], os.environ["DJANGO_ADMIN_EMAIL"]),)
-
-

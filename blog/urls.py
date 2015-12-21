@@ -14,8 +14,7 @@ urlpatterns = [
     url(r'^feed/$', feeds.LatestArticlesFeed(), name='rssfeed'),
     url(r'^(?P<slug>[a-z0-9_-]+)/(?:page/(?P<page>[0-9]+)/)?$',
         views.CategoryView.as_view(), name='category'),
-    #url(r'^podcast/feed/$', feeds.PodcastFeed(),
+    # url(r'^podcast/feed/$', feeds.PodcastFeed(),
     url(r'^(?P<slug>[a-z0-9_-]+)/feed/$', feeds.CategoryFeed(),
         name='categoryfeed'),
 ]
-

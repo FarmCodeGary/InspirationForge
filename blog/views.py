@@ -1,15 +1,13 @@
-from django.shortcuts import get_object_or_404, render
-from django.views.generic import ListView, DetailView, View, FormView
-from django.views.generic.edit import FormMixin
-from django.views.generic.detail import SingleObjectMixin
+from django.shortcuts import render
+from django.views.generic import ListView, DetailView
 from django.utils import timezone
 from django.http import HttpResponseRedirect
-from django.core.paginator import Paginator
 from django.core.mail import mail_admins
 from django.core.urlresolvers import reverse
 
 from .models import Article, Tag, Category, Contributor
 from .forms import CommentForm
+
 
 class IndexView(ListView):
     """
@@ -21,13 +19,13 @@ class IndexView(ListView):
     template_name = 'blog/index.html'
     paginate_by = 5
     paginate_orphans = 1
-    
+
     def get_queryset(self):
         """
         Returns queryset containing all published articles.
         """
         return Article.published_articles()
-    
+
     def get_context_data(self, **kwargs):
         """
         Adds `page_title` and `page_heading` to the template context
@@ -37,7 +35,7 @@ class IndexView(ListView):
         context = super().get_context_data(**kwargs)
         context['page_url_prefix'] = self.get_page_url_prefix()
         return context
-    
+
     def get_page_url_prefix(self):
         return reverse("blog:index") + "page/"
 
@@ -46,9 +44,9 @@ class TagView(IndexView):
     """
     A list view that displays all published blog posts with a given tag.
     """
-    
+
     template_name = 'blog/tag.html'
-    
+
     def get_queryset(self):
         """
         Uses a keyword argument `slug` to choose a tag, and gets all
@@ -57,12 +55,12 @@ class TagView(IndexView):
         slug = self.kwargs['slug']
         self.tag = Tag.objects.get(slug__exact=slug)
         return Article.published_articles().filter(tags=self.tag)
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['tag'] = self.tag
         return context
-    
+
     def get_page_url_prefix(self):
         return self.tag.get_absolute_url() + "page/"
 
@@ -71,9 +69,9 @@ class CategoryView(IndexView):
     """
     A list view that displays all published blog posts in a given category.
     """
-    
+
     template_name = 'blog/category.html'
-    
+
     def get_queryset(self):
         """
         Uses a keyword argument `slug` to choose a category, and gets all
@@ -82,20 +80,20 @@ class CategoryView(IndexView):
         slug = self.kwargs['slug']
         self.category = Category.objects.get(slug__exact=slug)
         return Article.published_articles().filter(category=self.category)
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['category'] = self.category
         return context
-    
+
     def get_page_url_prefix(self):
         return self.category.get_absolute_url() + "page/"
 
 
 class ContributorView(IndexView):
-    
+
     template_name = 'blog/contributor.html'
-    
+
     def get_queryset(self):
         self.contributor = Contributor.objects.get(
             slug__exact=self.kwargs['slug']
@@ -103,12 +101,12 @@ class ContributorView(IndexView):
         return Article.published_articles().filter(
             contributors=self.contributor
         )
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['contributor'] = self.contributor
         return context
-    
+
     def get_page_url_prefix(self):
         return self.contributor.get_absolute_url() + "page/"
 
@@ -120,7 +118,7 @@ class ArticleView(DetailView):
     """
     model = Article
     template_name = 'blog/article.html'
-    
+
     def get_object(self):
         """
         Uses keyword arguments `year`, `month` and `slug` to find the correct
@@ -130,11 +128,11 @@ class ArticleView(DetailView):
         month = int(self.kwargs['month'])
         slug = self.kwargs['slug']
         return Article.objects.get(
-            pub_date__year = year,
-            pub_date__month = month,
-            slug__exact = slug
+            pub_date__year=year,
+            pub_date__month=month,
+            slug__exact=slug
         )
-    
+
     def get_context_data(self, **kwargs):
         """
         Adds a blank `CommentForm` to a context variable named `form`.
@@ -142,7 +140,7 @@ class ArticleView(DetailView):
         context = super(DetailView, self).get_context_data(**kwargs)
         context['form'] = CommentForm()
         return context
-    
+
     def post(self, request, *args, **kwargs):
         """
         A `POST` request is used to submit a comment on the given article.
@@ -162,13 +160,12 @@ class ArticleView(DetailView):
             new_comment.article = self.object
             new_comment.pub_date = timezone.now()
             new_comment.save()
-            
+
             subject = 'New comment on "{}" from "{}"'.format(
                 new_comment.article.title, new_comment.name)
             uri = request.build_absolute_uri(new_comment.get_absolute_url())
             message = '{} wrote:\n"{}"\nView on site: {}'.format(
                 new_comment.name, new_comment.text, uri)
-            
+
             mail_admins(subject, message)
             return HttpResponseRedirect(new_comment.get_absolute_url())
-

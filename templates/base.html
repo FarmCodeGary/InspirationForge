@@ -95,8 +95,7 @@
             <p>
               {% for contributor in contributors %}
                 <a href="{{ contributor.get_absolute_url }}">
-                  {{ contributor.display_name }}
-                </a>
+                {{ contributor.display_name }}</a>
                 ({{ contributor.num_articles }}){% if not forloop.last %}, {% endif%}
               {% endfor %}
             </p>

@@ -38,7 +38,7 @@
     <div class="panel-body">
       <form id="commentform" action="{{ article.get_absolute_url }}#commentform" method="post" class="form">
         {% csrf_token %}
-        {% bootstrap_form form %}
+        {% bootstrap_form comment_form %}
         {% buttons %}
           <button type="submit" class="btn btn-primary">Submit</button>
         {% endbuttons %}
@@ -47,4 +47,3 @@
   </div>
 </div>
 {% endblock %}
-

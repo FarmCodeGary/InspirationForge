@@ -157,7 +157,7 @@ class ArticleView(DetailView):
             new_comment = form.save(commit=False)
         except ValueError:
             context = self.get_context_data()
-            context['form'] = form
+            context['comment_form'] = form
             return render(request, self.template_name, context)
         else:
             new_comment.article = self.object

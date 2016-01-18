@@ -64,6 +64,13 @@ class IndexViewTests(TestCase):
 
 
 class TagViewTests(TestCase):
+    def test_with_nonexistent_tag(self):
+        """
+        Looking for a non-existent tag should cause a 404 error.
+        """
+        response = self.client.get(reverse('blog:tag', args=['doesnt-exist']))
+        self.assertEqual(response.status_code, 404)
+
     def test_with_future_article(self):
         """
         Articles with a pub_date in the future should not be displayed on the
@@ -82,7 +89,38 @@ class TagViewTests(TestCase):
         self.assertQuerysetEqual(response.context['article_list'], [])
 
 
+class CategoryViewTests(TestCase):
+    def test_with_nonexistent_category(self):
+        """
+        Looking for a non-existent category should cause a 404 error.
+        """
+        response = self.client.get(reverse(
+            'blog:category',
+            args=['doesnt-exist']
+        ))
+        self.assertEqual(response.status_code, 404)
+
+
+class ContributorViewTests(TestCase):
+    def test_with_nonexistent_contributor(self):
+        """
+        Looking for a non-existent contributor should cause a 404 error.
+        """
+        response = self.client.get(reverse(
+            'blog:category',
+            args=['doesnt-exist']
+        ))
+        self.assertEqual(response.status_code, 404)
+
+
 class ArticleViewTests(TestCase):
+    def test_with_nonexistent_article(self):
+        response = self.client.get(reverse(
+            'blog:article',
+            args=['2015', '1', 'doesnt-exist']
+        ))
+        self.assertEqual(response.status_code, 404)
+
     def test_without_leading_zero_on_month(self):
         pub_date = timezone.make_aware(datetime.datetime(2013, 9, 15))
         Article.objects.create(

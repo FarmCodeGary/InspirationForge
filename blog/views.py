@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from django.utils import timezone
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect
 from django.core.mail import mail_admins
 from django.core.urlresolvers import reverse
+from django.shortcuts import get_object_or_404
 
 from .models import Article, Tag, Category, Contributor
 from .forms import CommentForm
@@ -53,7 +54,7 @@ class TagView(IndexView):
         published articles with the tag.
         """
         slug = self.kwargs['slug']
-        self.tag = Tag.objects.get(slug__exact=slug)
+        self.tag = get_object_or_404(Tag, slug__exact=slug)
         return Article.published_articles().filter(tags=self.tag)
 
     def get_context_data(self, **kwargs):
@@ -78,15 +79,8 @@ class CategoryView(IndexView):
         published articles in the category.
         """
         slug = self.kwargs['slug']
-        try:
-            self.category = Category.objects.get(slug__exact=slug)
-        except Category.DoesNotExist:
-            raise Http404(
-                "Tried and failed to find category with slug '{}'."
-                .format(slug)
-            )
-        else:
-            return Article.published_articles().filter(category=self.category)
+        self.category = get_object_or_404(Category, slug__exact=slug)
+        return Article.published_articles().filter(category=self.category)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -103,17 +97,11 @@ class ContributorView(IndexView):
 
     def get_queryset(self):
         slug = self.kwargs['slug']
-        try:
-            self.contributor = Contributor.objects.get(
-                slug__exact=slug
-            )
-        except Contributor.DoesNotExist:
-            raise Http404("Failed to find contributor with slug '{}'."
-                          .format(slug))
-        else:
-            return Article.published_articles().filter(
-                contributors=self.contributor
-            )
+        self.contributor = get_object_or_404(Contributor,
+                                             slug__exact=slug)
+        return Article.published_articles().filter(
+            contributors=self.contributor
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -140,15 +128,12 @@ class ArticleView(DetailView):
         year = int(self.kwargs['year'])
         month = int(self.kwargs['month'])
         slug = self.kwargs['slug']
-        try:
-            article = Article.objects.get(
-                pub_date__year=year,
-                pub_date__month=month,
-                slug__exact=slug
-            )
-        except Article.DoesNotExist:
-            raise Http404("Failed to find article with year {}, month {}, " +
-                          "and slug '{}'.".format(year, month, slug))
+        article = get_object_or_404(
+            Article,
+            pub_date__year=year,
+            pub_date__month=month,
+            slug__exact=slug
+        )
         return article
 
     def get_context_data(self, **kwargs):

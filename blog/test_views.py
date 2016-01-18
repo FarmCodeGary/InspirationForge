@@ -107,7 +107,7 @@ class ContributorViewTests(TestCase):
         Looking for a non-existent contributor should cause a 404 error.
         """
         response = self.client.get(reverse(
-            'blog:category',
+            'blog:contributor',
             args=['doesnt-exist']
         ))
         self.assertEqual(response.status_code, 404)
